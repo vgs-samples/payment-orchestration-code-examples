@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiplexing Integration Demo</title>
+</head>
+<body>
+  <div id="vgs-checkout"></div>
+  <script src="https://js.verygoodvault.com/vgs-checkout/0.7.0/checkout.umd.js"></script>
+  <script>
+    const checkout = new VGSCheckout.Checkout({
+      tntId: "{{tnt}}",
+      environment: "sandbox",
+      billingAddress: false,
+      authToken: "{{accessToken}}",
+    });
+
+    checkout.mount("#vgs-checkout", {});
+    checkout.on('SubmitSuccess', ({ data }) => {
+
+      fetch('./transfers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({"finantial_instrument": data.data.id}),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    })
+  </script>
+</body>
+</html>
