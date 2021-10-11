@@ -12,25 +12,26 @@ TNT_ID = os.environ.get('TNT_ID')
 
 CORS(app)
 
-def get_access_token():
+def get_access_token(scope):
     data = {
         'client_id': os.environ.get('MULTIPLEXING_AUTH_ID'),
         'client_secret': os.environ.get('MULTIPLEXING_AUTH_SECRET'),
-        'grant_type': 'client_credentials',
+        'grant_type': 'client_credentials', 
+        'scope': scope,
     }
     response = requests.post(auth_api, data=data)
+    print(response.json())
     return response.json()
         
 @app.route("/")
 def index():
-    print('qqweqweqwe-->', TNT_ID, os.environ.get('MULTIPLEXING_AUTH_ID'), os.environ.get('MULTIPLEXING_AUTH_SECRET'))
-    access_token = get_access_token()
-    return render_template('./index.html', tnt=TNT_ID, accessToken=access_token['access_token'])
+    access_token = get_access_token("financial-instruments:write")
+    return render_template('./index.html', tnt=TNT_ID, accessToken=access_token.get('access_token'))
 
 @app.route("/transfers", methods=['POST'])
 def transfer():
     req = request.get_json()
-    access_token = get_access_token()
+    access_token = get_access_token("transfers:write")
     headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer {}".format(access_token['access_token'])
