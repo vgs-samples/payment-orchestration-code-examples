@@ -1,0 +1,17 @@
+version: "3.3"
+
+services:
+  app:
+    build: .
+    image: multiplexing-integration-demo
+    container_name: multiplexing-integration-demo
+    ports:
+      - "5000:5000"
+    networks:
+      - multiplexing-integration-demo
+    env_file:
+     - ./.env
+
+networks:
+  multiplexing-integration-demo:
+    name: multiplexing-integration-demo

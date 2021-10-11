@@ -23,6 +23,7 @@ def get_access_token():
         
 @app.route("/")
 def index():
+    print('qqweqweqwe-->', TNT_ID, os.environ.get('MULTIPLEXING_AUTH_ID'), os.environ.get('MULTIPLEXING_AUTH_SECRET'))
     access_token = get_access_token()
     return render_template('./index.html', tnt=TNT_ID, accessToken=access_token['access_token'])
 
