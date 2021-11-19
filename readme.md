@@ -9,7 +9,8 @@ This demo is built with:
 1. `Git clone git@github.com:vgs-samples/multiplexing-integration-demo.git` 
 2. Create `.env` file in the project root folder
 3. Set up enviroment variables
-Please note, you need to use [credentials for checkout](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/authentication#checkout-credentials)
+
+Please note: you need to use [credentials for checkout](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/authentication#checkout-credentials).
 ```
 TNT_ID=
 MULTIPLEXING_AUTH_ID=
@@ -25,7 +26,8 @@ MULTIPLEXING_AUTH_SECRET=
 1. `Git clone git@github.com:vgs-samples/multiplexing-integration-demo.git` 
 2. Create `.env` file in the project root folder
 3. Set up enviroment variables
-Please note, you need to use [credentials for checkout](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/authentication#checkout-credentials)
+
+Please note: you need to use [credentials for checkout](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/authentication#checkout-credentials).
 ```
 TNT_ID=
 MULTIPLEXING_AUTH_ID=
