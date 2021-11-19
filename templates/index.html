@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multiplexing Integration Demo</title>
+  <title>Payment Orchestration Demo</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
@@ -30,7 +30,7 @@
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({"finantial_instrument": data.data.id}),
+        body: JSON.stringify({"financial_instrument": data.data.id}),
       })
       .then(response => response.json())
       .then(data => {
