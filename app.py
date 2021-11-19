@@ -14,8 +14,8 @@ CORS(app)
 
 def get_access_token(scope):
     data = {
-        'client_id': os.environ.get('MULTIPLEXING_AUTH_ID'),
-        'client_secret': os.environ.get('MULTIPLEXING_AUTH_SECRET'),
+        'client_id': os.environ.get('MULTIPLEXING_CLIENT_ID'),
+        'client_secret': os.environ.get('MULTIPLEXING_CLIENT_SECRET'),
         'grant_type': 'client_credentials', 
         'scope': scope,
     }
