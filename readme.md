@@ -1,5 +1,9 @@
-## Chechout - Multiplexing integration demo
-Before run the applicaiton, make sure, that you install a [Multiplexing applicaiton](https://60e5d733066228abd877fc56--vgs-docs.netlify.app/docs/payment-optimization/multiplexing/guide), create a gateways and rules and get credentials for authorisation in Multiplexing application
+## VGS Universal Checkout & Payment Orchestration Integration Demo
+Before running the application, make sure, that you have access to your [Payment Orchestration Instance & API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/quickstart) and all prerequisites are met, gateways and rules are set and you have access credentials to authenticate.
+
+This demo is built with:
+- [VGS Payment Orchestration product & API](https://www.verygoodsecurity.com/docs/payment-optimization/checkout)
+- [VGS Universal Checkout JS library](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration)
 
 ### How to run
 1. `Git clone git@github.com:vgs-samples/multiplexing-integration-demo.git` 
@@ -27,9 +31,11 @@ MULTIPLEXING_AUTH_SECRET=
 5. Open `http://localhost:5000` in browser
 
 ### How to use
-Fill and submit the checkout form with test credit card
+Fill and submit the Universal Checkout form with a test payment card. Please note that a test payment card depends on the gateway you use and can be different if you want to try a successful transaction flow.
 ```
 cc: 4111 1111 1111 1111
 exp.date: 02/22
 cvc: 123
 ```
+
+For more details on how to build your payments flow, check [this guide](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/payment-flow) out.
