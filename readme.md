@@ -9,19 +9,23 @@ This demo is built with:
 1. `Git clone git@github.com:vgs-samples/multiplexing-integration-demo.git` 
 2. Create `.env` file in the project root folder
 3. Set up enviroment variables
+Please note, you need to use [credentials for checkout](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/authentication#checkout-credentials)
 ```
 TNT_ID=
 MULTIPLEXING_AUTH_ID=
 MULTIPLEXING_AUTH_SECRET=
 ```
-4. `export FLASK_APP=app`
-5. `flask run`
-6. Open `http://localhost:5000` in browser
+4. `pythom -m venv venv`
+5. `. ./venv/bin/activate`
+6. `export FLASK_APP=app`
+7. `flask run`
+8. Open `http://localhost:5000` in browser
 
 ### How to run with Docker
 1. `Git clone git@github.com:vgs-samples/multiplexing-integration-demo.git` 
 2. Create `.env` file in the project root folder
 3. Set up enviroment variables
+Please note, you need to use [credentials for checkout](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/authentication#checkout-credentials)
 ```
 TNT_ID=
 MULTIPLEXING_AUTH_ID=
@@ -33,6 +37,7 @@ MULTIPLEXING_AUTH_SECRET=
 ### How to use
 Fill and submit the Universal Checkout form with a test payment card. Please note that a test payment card depends on the gateway you use and can be different if you want to try a successful transaction flow.
 ```
+cardholder: Any Name
 cc: 4111 1111 1111 1111
 exp.date: 02/22
 cvc: 123
