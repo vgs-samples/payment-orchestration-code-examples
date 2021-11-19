@@ -5,21 +5,26 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Multiplexing Integration Demo</title>
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <div id="vgs-checkout"></div>
-  <script src="https://js.verygoodvault.com/vgs-checkout/0.7.0/checkout.umd.js"></script>
+  <script src="https://js.verygoodvault.com/vgs-checkout/0.9.0/checkout.umd.js"></script>
   <script>
     const checkout = new VGSCheckout.Checkout({
-      tntId: "{{tnt}}",
+      vaultId: "{{tnt}}",
       environment: "sandbox",
       billingAddress: false,
       authToken: "{{accessToken}}",
     });
 
     checkout.mount("#vgs-checkout", {});
+    checkout.on('SubmitStart', ({data}) => {
+      checkout.update({
+        formStatus: "loading"
+      });
+    })
     checkout.on('SubmitSuccess', ({ data }) => {
-
       fetch('./transfers', {
         method: 'POST',
         headers: {
@@ -30,9 +35,15 @@
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
+        checkout.update({
+          formStatus: "success"
+        });
       })
       .catch((error) => {
         console.error('Error:', error);
+        checkout.update({
+          formStatus: "error"
+        });
       });
     })
   </script>
