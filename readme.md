@@ -6,7 +6,7 @@ This demo is built with:
 - [VGS Universal Checkout JS library](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration)
 
 ### How to run
-1. `Git clone git@github.com:vgs-samples/multiplexing-integration-demo.git` 
+1. `Git clone git@github.com:vgs-samples/payment-orchestration-demo.git` 
 2. Create `.env` file in the project root folder
 3. Set up enviroment variables
 Please note, you need to use [Checkout credentials](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/authentication#checkout-credentials)
