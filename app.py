@@ -27,6 +27,11 @@ def get_access_token(scope):
 def index():
     access_token = get_access_token("financial-instruments:write")
     return render_template('./index.html', tnt=VAULT_ID, accessToken=access_token.get('access_token'))
+@app.route("/access")
+def access():
+    access_token = get_access_token("financial-instruments:write transfers:write orders:write")
+    print(access_token)
+    return access_token.get('access_token')
 
 @app.route("/transfers", methods=['POST'])
 def transfer():
