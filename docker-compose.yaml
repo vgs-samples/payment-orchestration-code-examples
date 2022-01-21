@@ -3,15 +3,15 @@ version: "3.3"
 services:
   app:
     build: .
-    image: multiplexing-integration-demo
-    container_name: multiplexing-integration-demo
+    image: payment-orchestration-demo
+    container_name: payment-orchestration-demo
     ports:
       - "5000:5000"
     networks:
-      - multiplexing-integration-demo
+      - payment-orchestration-demo
     env_file:
      - ./.env
 
 networks:
-  multiplexing-integration-demo:
-    name: multiplexing-integration-demo
+  payment-orchestration-demo:
+    name: payment-orchestration-demo

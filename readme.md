@@ -11,9 +11,10 @@ This demo is built with:
 3. Set up enviroment variables
 Please note, you need to use [Checkout credentials](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/authentication#checkout-credentials)
 ```
-VAULT_ID=
-MULTIPLEXING_CLIENT_ID=
-MULTIPLEXING_CLIENT_SECRET=
+CUSTOMER_VAULT_ID=
+PAYMENT_ORCH_VAULT_ID=
+PAYMENT_ORCH_CLIENT_ID=
+PAYMENT_ORCH_CLIENT_SECRET=
 ```
 4. `pythom -m venv venv`
 5. `. ./venv/bin/activate`
@@ -26,11 +27,12 @@ MULTIPLEXING_CLIENT_SECRET=
 1. `Git clone git@github.com:vgs-samples/multiplexing-integration-demo.git` 
 2. Create `.env` file in the project root folder
 3. Set up enviroment variables
-Please note, you need to use [Checkout credentials](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/authentication#checkout-credentials)
+Please note, you need to use [Payments credentials](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/authentication#checkout-credentials)
 ```
-VAULT_ID=
-MULTIPLEXING_CLIENT_ID=
-MULTIPLEXING_CLIENT_SECRET=
+CUSTOMER_VAULT_ID=
+PAYMENT_ORCH_VAULT_ID=
+PAYMENT_ORCH_CLIENT_ID=
+PAYMENT_ORCH_CLIENT_SECRET=
 ``` 
 4. `docker-compose up --build`
 5. Open `http://localhost:5000` in browser
