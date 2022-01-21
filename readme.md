@@ -21,7 +21,9 @@ PAYMENT_ORCH_CLIENT_SECRET=
 6. `export FLASK_APP=app`
 7. `pip install -r ./requirements.txt`
 8. `flask run`
-9. Open `http://localhost:5000` in browser
+9. `ngrok http 5000` for sharing your localhost worldwide
+10. `Setup ngrok link as upstream for inbound route on the Dashboard`
+11. Open `http://localhost:5000` in browser
 
 ### How to run with Docker
 1. `Git clone git@github.com:vgs-samples/multiplexing-integration-demo.git` 
@@ -35,7 +37,9 @@ PAYMENT_ORCH_CLIENT_ID=
 PAYMENT_ORCH_CLIENT_SECRET=
 ``` 
 4. `docker-compose up --build`
-5. Open `http://localhost:5000` in browser
+5. `ngrok http 5000` for sharing your localhost worldwide
+6. `Setup ngrok link as upstream for inbound route on the Dashboard`
+7. Open `http://localhost:5000` in browser
 
 ### How to use
 Fill and submit the Universal Checkout form with a test payment card. Please note that a test payment card depends on the gateway you use and can be different if you want to try a successful transaction flow.
