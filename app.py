@@ -13,7 +13,7 @@ VAULT_ID = os.environ.get('PAYMENT_ORCH_VAULT_ID')
 
 CORS(app)
 
-def get_access_token(scope):
+def get_access_token():
     data = {
         'client_id': os.environ.get('PAYMENT_ORCH_CLIENT_ID'),
         'client_secret': os.environ.get('PAYMENT_ORCH_CLIENT_SECRET'),
@@ -27,9 +27,9 @@ def index():
     return render_template('./index.html', customerVaultId = os.environ.get('CUSTOMER_VAULT_ID'))
 
 @app.route("/checkout", methods=['POST'])
-def save_fin_instr():
+def checkout():
     # ==> Save aliassed credit card to DB here <==
-    access_token = get_access_token("financial-instruments:admin transfers:admin")
+    access_token = get_access_token()
     headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer {}".format(access_token['access_token'])
