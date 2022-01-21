@@ -9,42 +9,40 @@
 </head>
 <body>
   <div id="vgs-checkout"></div>
-  <script src="https://js.verygoodvault.com/vgs-checkout/0.9.0/checkout.umd.js"></script>
+  <a href="" id="reload">Reload page</a>
+  <script src="https://checkout.verygoodvault.com/v1/"></script>
   <script>
     const checkout = new VGSCheckout.Checkout({
-      vaultId: "{{tnt}}",
+      vaultId: "{{customerVaultId}}",
       environment: "sandbox",
       billingAddress: false,
-      authToken: "{{accessToken}}",
+      submitPath: '/checkout'
     });
 
-    checkout.mount("#vgs-checkout", {});
+    checkout.mount("#vgs-checkout", {
+      labels: {
+        submit: {
+          ctaLabel: 'PAY $1'
+        }
+      }
+    });
     checkout.on('SubmitStart', ({data}) => {
       checkout.update({
         formStatus: "loading"
       });
     })
+
     checkout.on('SubmitSuccess', ({ data }) => {
-      fetch('./transfers', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({"financial_instrument": data.data.id}),
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
+      if (data.data.state === 'successful') {
         checkout.update({
           formStatus: "success"
         });
-      })
-      .catch((error) => {
-        console.error('Error:', error);
+      } else {
         checkout.update({
           formStatus: "error"
         });
-      });
+      }
+      document.getElementById('reload').style.display = "inline-block"
     })
   </script>
 </body>
