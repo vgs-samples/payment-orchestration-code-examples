@@ -57,7 +57,7 @@ def checkout():
         "currency": "USD",
         "source": fin_instr.json()['data']['id'],
     }
-    tansfer = requests.post(
+    transfer = requests.post(
         'https://{}.sandbox.verygoodproxy.com/transfers'.format(VAULT_ID),
         headers = headers,
         json = transfers_data,
@@ -65,5 +65,5 @@ def checkout():
         verify = Path(__file__).resolve().parent / f'certs/sandbox_cert.pem'
         # verify = False
     )
-    return tansfer.json()
+    return transfer.json()
 
