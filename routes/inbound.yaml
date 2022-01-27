@@ -1,0 +1,64 @@
+data:
+  - attributes:
+      created_at: '2022-01-21T14:04:01'
+      destination_override_endpoint: 'https://b984-79-110-134-11.ngrok.io'
+      entries:
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: PathInfo
+                  operator: matches
+                  type: string
+                  values:
+                    - /checkout
+          id: f2aeb97e-85df-402a-a2c7-88294274ccdb
+          id_selector: null
+          operation: REDACT
+          operations: null
+          phase: REQUEST
+          public_token_generator: FPE_SIX_T_FOUR
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.card.number
+          transformer_config_map: null
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: PathInfo
+                  operator: matches
+                  type: string
+                  values:
+                    - /checkout
+          id: 5d5fdd09-e312-4806-a295-90c89e192e1a
+          id_selector: null
+          operation: REDACT
+          operations: null
+          phase: REQUEST
+          public_token_generator: FPE_SIX_T_FOUR
+          targets:
+            - body
+          token_manager: VOLATILE
+          transformer: JSON_PATH
+          transformer_config:
+            - $.card.cvc
+          transformer_config_map: null
+      host_endpoint: (.*)\.verygoodproxy\.com
+      id: f1d753f4-be63-4e24-a25f-59a0819fc867
+      ordinal: null
+      port: 80
+      protocol: http
+      source_endpoint: '*'
+      tags:
+        name: echo.apps.verygood.systems-beige-pentagon
+        source: RouteContainer
+      updated_at: '2022-01-26T15:39:19'
+    id: f1d753f4-be63-4e24-a25f-59a0819fc867
+    type: rule_chain
+version: 1

@@ -28,7 +28,7 @@ def get_access_token():
         
 @app.route("/")
 def index():
-    print(Path(__file__).resolve().parent / f'certs/sandbox_cert.pem')
+    print('---->', Path(__file__).resolve().parent / f'certs/sandbox_cert.pem')
 
     return render_template('./index.html', customerVaultId = CUSTOMER_VAULT_ID)
 
@@ -44,8 +44,6 @@ def checkout():
         "Authorization": "Bearer {}".format(access_token['access_token'])
     }
     fin_instr_data = request.get_json()
-    
-    print(Path(__file__).resolve().parent / f'certs/sandbox_cert.pem' )
     fin_instr = requests.post('https://{}.sandbox.verygoodproxy.com/financial_instruments'.format(VAULT_ID),
         headers = headers,
         json = fin_instr_data,
@@ -54,13 +52,11 @@ def checkout():
         verify = Path(__file__).resolve().parent / f'certs/sandbox_cert.pem'
         # verify = False
     )
-    
     transfers_data = {
         "amount": 1 * 100,
         "currency": "USD",
         "source": fin_instr.json()['data']['id'],
     }
-    
     tansfer = requests.post(
         'https://{}.sandbox.verygoodproxy.com/transfers'.format(VAULT_ID),
         headers = headers,
@@ -69,6 +65,5 @@ def checkout():
         verify = Path(__file__).resolve().parent / f'certs/sandbox_cert.pem'
         # verify = False
     )
-    print(tansfer.json())
     return tansfer.json()
 

@@ -1,0 +1,65 @@
+data:
+  - attributes:
+      created_at: '2022-01-24T15:47:12'
+      destination_override_endpoint: '*'
+      entries:
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: PathInfo
+                  operator: matches
+                  type: string
+                  values:
+                    - /financial_instruments
+          id: c1f37efb-eb7f-4dff-9192-bcd7b2ae43a5
+          id_selector: null
+          operation: ENRICH
+          operations: null
+          phase: REQUEST
+          public_token_generator: FPE_SIX_T_FOUR
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.card.number
+          transformer_config_map: null
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: PathInfo
+                  operator: matches
+                  type: string
+                  values:
+                    - /financial_instruments
+          id: 4dc854ff-835a-4768-b617-6f502db854f6
+          id_selector: null
+          operation: ENRICH
+          operations: null
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: VOLATILE
+          transformer: JSON_PATH
+          transformer_config:
+            - $.card.cvc
+          transformer_config_map: null
+          type: null
+      host_endpoint: tnthjkhlmbb.sandbox.verygoodproxy.com
+      id: a4ebaf1f-db4c-4df2-b17b-9fc91d7b4650
+      ordinal: null
+      port: 80
+      protocol: http
+      source_endpoint: '*'
+      tags:
+        name: coral-cross
+        source: RouteContainer
+      updated_at: '2022-01-24T15:47:46'
+    id: a4ebaf1f-db4c-4df2-b17b-9fc91d7b4650
+    type: rule_chain
+version: 1
