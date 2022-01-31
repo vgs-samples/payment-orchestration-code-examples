@@ -9,14 +9,17 @@
 </head>
 <body>
   <div id="vgs-checkout"></div>
-  <a href="" id="reload">Reload page</a>
+  <a href="" id="reload">Send one more time</a>
   <script src="https://checkout.verygoodvault.com/v1/"></script>
   <script>
     const checkout = new VGSCheckout.Checkout({
       vaultId: "{{customerVaultId}}",
       environment: "sandbox",
       billingAddress: false,
-      submitPath: '/checkout'
+      submitPath: '/checkout',
+      // billingAddress: {
+      //   validCountries: ["US", "CA"]
+      // },
     });
 
     checkout.mount("#vgs-checkout", {
@@ -42,6 +45,13 @@
           formStatus: "error"
         });
       }
+      document.getElementById('reload').style.display = "inline-block"
+    })
+
+    checkout.on('SubmitFail', ({ data }) => {
+      checkout.update({
+        formStatus: "error"
+      });
       document.getElementById('reload').style.display = "inline-block"
     })
   </script>
