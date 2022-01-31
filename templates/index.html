@@ -17,9 +17,9 @@
       environment: "sandbox",
       billingAddress: false,
       submitPath: '/checkout',
-      // billingAddress: {
-      //   validCountries: ["US", "CA"]
-      // },
+      billingAddress: {
+        validCountries: ["US", "CA"]
+      },
     });
 
     checkout.mount("#vgs-checkout", {
