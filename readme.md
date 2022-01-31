@@ -11,6 +11,8 @@ This demo is built with:
 1. Clone the repo `git clone git@github.com:vgs-samples/payment-orchestration-demo.git`
 2. Create .env file in the root project folder
 3. Fill the file
+4. Create Inbound and Outbound routes from .yaml files. You can find it in `./routes` folder
+#### .env file - content description
 ```
 CUSTOMER_VAULT_ID=
 PAYMENT_ORCH_CLIENT_ID=
@@ -18,11 +20,11 @@ PAYMENT_ORCH_CLIENT_SECRET=
 PAYMENT_ORCH_INBOUND_PROXY = 
 PAYMENT_ORCH_OUTBOUND_PROXY =
 ``` 
-`CUSTOMER_VAULT_ID` - your vault id for storing credit-card data
-`PAYMENT_ORCH_CLIENT_ID`, `PAYMENT_ORCH_CLIENT_SECRET` - [credentials](https://www.verygoodsecurity.com/docs/settings/access-credentials#generating-new-credentials) for revealing credit-card data on your vault 
-`PAYMENT_ORCH_INBOUND_PROXY` - full link to the Payment Orchestration [Inbound proxy](https://www.verygoodsecurity.com/docs/guides/inbound-connection#inbound-connection)
-`PAYMENT_ORCH_OUTBOUND_PROXY` - full link to the Payment Orchestration [Outbound proxy](https://www.verygoodsecurity.com/docs/guides/)
-4. Create Inbound and Outbound routes from .yaml files. You can find it in `./routes` folder
+`CUSTOMER_VAULT_ID` - Your vault id for storing `credit-card` data \
+`PAYMENT_ORCH_CLIENT_ID`, `PAYMENT_ORCH_CLIENT_SECRET` - [Credentials](https://www.verygoodsecurity.com/docs/settings/access-credentials#generating-new-credentials) For revealing credit-card data on your vault \
+`PAYMENT_ORCH_INBOUND_PROXY` - Full link to the Payment Orchestration [Inbound proxy](https://www.verygoodsecurity.com/docs/guides/inbound-connection#inbound-connection)\
+`PAYMENT_ORCH_OUTBOUND_PROXY` - Full link to the Payment Orchestration [Outbound proxy](https://www.verygoodsecurity.com/docs/guides/)'\
+
 
 ### How to run
 1. `pythom -m venv venv`
