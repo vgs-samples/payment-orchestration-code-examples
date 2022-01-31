@@ -7,7 +7,7 @@ This demo is built with:
 
 ### How to run
 
-#### Prepearing
+#### Preparing
 1. Clone the repo `git clone git@github.com:vgs-samples/payment-orchestration-demo.git`
 2. Create .env file in the root project folder
 3. Fill the file
@@ -26,7 +26,7 @@ PAYMENT_ORCH_OUTBOUND_PROXY =
 `PAYMENT_ORCH_OUTBOUND_PROXY` - Full link to the Payment Orchestration [Outbound proxy](https://www.verygoodsecurity.com/docs/guides/)'\
 
 
-### How to run
+### How to run locally
 1. `pythom -m venv venv`
 2. `. ./venv/bin/activate`
 3. `export FLASK_APP=app`
