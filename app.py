@@ -1,4 +1,5 @@
 import os
+from venv import create
 import requests
 from flask import Flask
 from flask import render_template, request
@@ -41,7 +42,7 @@ def checkout():
         "Content-Type": "application/json",
         "Authorization": "Bearer {}".format(access_token['access_token'])
     }
-    fin_instr_data = request.get_json()
+    fin_instr_data = request.get_json()    
     fin_instr = requests.post(
         PAYMENT_ORCH_INBOUND_PROXY + '/financial_instruments',
         headers = headers,
