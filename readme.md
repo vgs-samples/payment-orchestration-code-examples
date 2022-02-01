@@ -7,10 +7,10 @@ This demo is built with:
 
 ### How to run
 
-#### Preparing
+#### Prerequisites
 1. Clone the repo `git clone git@github.com:vgs-samples/payment-orchestration-demo.git`
 2. Create .env file in the root project folder
-3. Fill the file
+3. Fill in the file with the necessary configuration variables shown below.
 4. Create Inbound and Outbound routes from .yaml files. You can find it in `./routes` folder
 #### .env file - content description
 ```
