@@ -1,53 +1,66 @@
 import os
+from venv import create
 import requests
 from flask import Flask
 from flask import render_template, request
 from flask import request
 from flask_cors import CORS
+from pathlib import Path
 
 app = Flask(__name__)
 auth_api = "https://auth.verygoodsecurity.com/auth/realms/vgs/protocol/openid-connect/token"
 
-VAULT_ID = os.environ.get('VAULT_ID')
+CUSTOMER_VAULT_ID = os.environ.get('CUSTOMER_VAULT_ID')
+PAYMENT_ORCH_INBOUND_PROXY = os.environ.get('PAYMENT_ORCH_INBOUND_PROXY')
+PAYMENT_ORCH_OUTBOUND_PROXY = os.environ.get('PAYMENT_ORCH_OUTBOUND_PROXY')
+PAYMENT_ORCH_CLIENT_ID = os.environ.get('PAYMENT_ORCH_CLIENT_ID')
+PAYMENT_ORCH_CLIENT_SECRET = os.environ.get('PAYMENT_ORCH_CLIENT_SECRET')
 
 CORS(app)
 
-def get_access_token(scope):
+def get_access_token():
     data = {
-        'client_id': os.environ.get('MULTIPLEXING_CLIENT_ID'),
-        'client_secret': os.environ.get('MULTIPLEXING_CLIENT_SECRET'),
+        'client_id': PAYMENT_ORCH_CLIENT_ID,
+        'client_secret': PAYMENT_ORCH_CLIENT_SECRET,
         'grant_type': 'client_credentials', 
-        'scope': scope,
     }
     response = requests.post(auth_api, data=data)
-    print(response.json())
     return response.json()
         
 @app.route("/")
 def index():
-    access_token = get_access_token("financial-instruments:write")
-    return render_template('./index.html', tnt=VAULT_ID, accessToken=access_token.get('access_token'))
-@app.route("/access")
-def access():
-    access_token = get_access_token("financial-instruments:write transfers:write orders:write")
-    print(access_token)
-    return access_token.get('access_token')
+    return render_template('./index.html', customerVaultId = CUSTOMER_VAULT_ID)
 
-@app.route("/transfers", methods=['POST'])
-def transfer():
-    req = request.get_json()
-    access_token = get_access_token("transfers:write")
+@app.route("/checkout", methods=['POST'])
+def checkout():
+    # ==> Save aliassed credit card to DB here <==
+    access_token = get_access_token()
+    proxies = {
+        'https': PAYMENT_ORCH_OUTBOUND_PROXY,
+    }
     headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer {}".format(access_token['access_token'])
     }
+    fin_instr_data = request.get_json()    
+    fin_instr = requests.post(
+        PAYMENT_ORCH_INBOUND_PROXY + '/financial_instruments',
+        headers = headers,
+        json = fin_instr_data,
+        proxies = proxies,
+        verify = Path(__file__).resolve().parent / f'certs/sandbox_cert.pem'
+    )
     transfers_data = {
         "amount": 1 * 100,
         "currency": "USD",
-        "source": req['financial_instrument'],
+        "source": fin_instr.json()['data']['id'],
     }
-    tr = requests.post('https://{}.sandbox.verygoodproxy.com/transfers'.format(VAULT_ID),
-        headers=headers,
-        json=transfers_data
+    transfer = requests.post(
+        PAYMENT_ORCH_INBOUND_PROXY + '/transfers',
+        headers = headers,
+        json = transfers_data,
+        proxies = proxies,
+        verify = Path(__file__).resolve().parent / f'certs/sandbox_cert.pem'
     )
-    return tr.json()
+    return transfer.json()
+

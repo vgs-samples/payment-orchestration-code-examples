@@ -1,4 +1,29 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+h1 {
+  padding: 20px 0;
+}
 #vgs-checkout {
   width: 450px;
   margin: 0 auto;
+}
+#reload {
+  display: inline-block;
+  margin: 0 auto;
+  padding: 10px 12px;
+  background: #1565C0;
+  border-radius: 4px;
+  color: #fff;
+  text-decoration: none;
+  display: none;
+}
+.demo-data_wr {
+  margin-top: 50px;
+}
+.demo-data {
+  padding: 20px 0;
 }
