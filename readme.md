@@ -5,6 +5,8 @@ This demo is built with:
 - [VGS Payment Orchestration product & API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration)
 - [VGS Universal Checkout JS library](https://www.verygoodsecurity.com/docs/payment-optimization/checkout)
 
+ <img src="https://www.verygoodsecurity.com/docs/vgs_theme/static/img/payment-optimization/checkout-multiplexing-flow.svg" />
+
 ### How to run
 
 #### Prerequisites
