@@ -5,15 +5,13 @@ This demo is built with:
 - [VGS Payment Orchestration product & API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration)
 - [VGS Universal Checkout JS library](https://www.verygoodsecurity.com/docs/payment-optimization/checkout)
 
- <img src="https://www.verygoodsecurity.com/docs/vgs_theme/static/img/payment-optimization/checkout-multiplexing-flow.svg" />
-
 ### How to run
 
-#### Prerequisites
-1. Clone the repo `git clone git@github.com:vgs-samples/payment-orchestration-demo.git`.
-2. Create .env file in the root project folder.
-3. Fill in the file with the necessary configuration variables shown below.
-4. Create Inbound and Outbound routes from .yaml files. You can find it in `./routes` folder.
+#### Preparing
+1. Clone the repo `git clone git@github.com:vgs-samples/payment-orchestration-demo.git`
+2. Create .env file in the root project folder
+3. Fill the file
+4. Create Inbound and Outbound routes from .yaml files. You can find it in `./routes` folder
 #### .env file - content description
 ```
 CUSTOMER_VAULT_ID=
@@ -29,7 +27,7 @@ PAYMENT_ORCH_OUTBOUND_PROXY =
 
 
 ### How to run locally
-1. `pythom -m venv venv`
+1. `python -m venv venv`
 2. `. ./venv/bin/activate`
 3. `export FLASK_APP=app`
 4. `pip install -r ./requirements.txt`
