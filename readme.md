@@ -19,7 +19,7 @@ CUSTOMER_VAULT_ACCESS_CREDS_USERNAME=
 CUSTOMER_VAULT_ACCESS_CREDS_SECRET=
 PAYMENT_ORCH_CLIENT_ID=
 PAYMENT_ORCH_CLIENT_SECRET=
-PAYMENT_ORCH_APP_DOMAIN
+PAYMENT_ORCH_APP_DOMAIN=
 ``` 
 `CUSTOMER_VAULT_ID` - Your vault id for storing `credit-card` data \
 `CUSTOMER_VAULT_ACCESS_CREDS_USERNAME`, `CUSTOMER_VAULT_ACCESS_CREDS_SECRET` - Vault [access credentials](https://www.verygoodsecurity.com/docs/settings/access-credentials#access-credentials), user id and secret \
