@@ -8,13 +8,14 @@ from flask_cors import CORS
 from pathlib import Path
 
 app = Flask(__name__)
-auth_api = "https://auth.verygoodsecurity.com/auth/realms/vgs/protocol/openid-connect/token"
 
+AUTH_API = "https://auth.verygoodsecurity.com/auth/realms/vgs/protocol/openid-connect/token"
 CUSTOMER_VAULT_ID = os.environ.get('CUSTOMER_VAULT_ID')
-PAYMENT_ORCH_INBOUND_PROXY = os.environ.get('PAYMENT_ORCH_INBOUND_PROXY')
-PAYMENT_ORCH_OUTBOUND_PROXY = os.environ.get('PAYMENT_ORCH_OUTBOUND_PROXY')
+PAYMENT_ORCH_APP_DOMAIN = os.environ.get('PAYMENT_ORCH_APP_DOMAIN')
 PAYMENT_ORCH_CLIENT_ID = os.environ.get('PAYMENT_ORCH_CLIENT_ID')
 PAYMENT_ORCH_CLIENT_SECRET = os.environ.get('PAYMENT_ORCH_CLIENT_SECRET')
+CUSTOMER_VAULT_ACCESS_CREDS_USERNAME = os.environ.get('CUSTOMER_VAULT_ACCESS_CREDS_USERNAME')
+CUSTOMER_VAULT_ACCESS_CREDS_SECRET = os.environ.get('CUSTOMER_VAULT_ACCESS_CREDS_SECRET')
 
 CORS(app)
 
@@ -23,8 +24,9 @@ def get_access_token():
         'client_id': PAYMENT_ORCH_CLIENT_ID,
         'client_secret': PAYMENT_ORCH_CLIENT_SECRET,
         'grant_type': 'client_credentials', 
+        'scope': 'transfers:write financial-instruments:write',
     }
-    response = requests.post(auth_api, data=data)
+    response = requests.post(AUTH_API, data=data)
     return response.json()
         
 @app.route("/")
@@ -32,11 +34,10 @@ def index():
     return render_template('./index.html', customerVaultId = CUSTOMER_VAULT_ID)
 
 @app.route("/checkout", methods=['POST'])
-def checkout():
-    # ==> Save aliassed credit card to DB here <==
+def checkout(): 
     access_token = get_access_token()
     proxies = {
-        'https': PAYMENT_ORCH_OUTBOUND_PROXY,
+        'https': 'http://' + CUSTOMER_VAULT_ACCESS_CREDS_USERNAME + ':' + CUSTOMER_VAULT_ACCESS_CREDS_SECRET + '@' + PAYMENT_ORCH_APP_DOMAIN + ':8080',
     }
     headers = {
         "Content-Type": "application/json",
@@ -44,7 +45,7 @@ def checkout():
     }
     fin_instr_data = request.get_json()    
     fin_instr = requests.post(
-        PAYMENT_ORCH_INBOUND_PROXY + '/financial_instruments',
+        'https://' + PAYMENT_ORCH_APP_DOMAIN + '/financial_instruments',
         headers = headers,
         json = fin_instr_data,
         proxies = proxies,
@@ -56,7 +57,7 @@ def checkout():
         "source": fin_instr.json()['data']['id'],
     }
     transfer = requests.post(
-        PAYMENT_ORCH_INBOUND_PROXY + '/transfers',
+        'https://' + PAYMENT_ORCH_APP_DOMAIN + '/transfers',
         headers = headers,
         json = transfers_data,
         proxies = proxies,
