@@ -1,4 +1,5 @@
 import os
+import json
 from venv import create
 import requests
 from flask import Flask
@@ -16,7 +17,7 @@ PAYMENT_ORCH_CLIENT_ID = os.environ.get('PAYMENT_ORCH_CLIENT_ID')
 PAYMENT_ORCH_CLIENT_SECRET = os.environ.get('PAYMENT_ORCH_CLIENT_SECRET')
 CUSTOMER_VAULT_ACCESS_CREDS_USERNAME = os.environ.get('CUSTOMER_VAULT_ACCESS_CREDS_USERNAME')
 CUSTOMER_VAULT_ACCESS_CREDS_SECRET = os.environ.get('CUSTOMER_VAULT_ACCESS_CREDS_SECRET')
-
+print(PAYMENT_ORCH_APP_DOMAIN)
 CORS(app)
 
 def get_access_token():
@@ -24,9 +25,10 @@ def get_access_token():
         'client_id': PAYMENT_ORCH_CLIENT_ID,
         'client_secret': PAYMENT_ORCH_CLIENT_SECRET,
         'grant_type': 'client_credentials', 
-        'scope': 'transfers:write financial-instruments:write',
+        # 'scope': 'financial_instremnets:write transfers:write'
     }
     response = requests.post(AUTH_API, data=data)
+    print(response.json())
     return response.json()
         
 @app.route("/")
@@ -36,21 +38,25 @@ def index():
 @app.route("/checkout", methods=['POST'])
 def checkout(): 
     access_token = get_access_token()
-    proxies = {
-        'https': 'http://' + CUSTOMER_VAULT_ACCESS_CREDS_USERNAME + ':' + CUSTOMER_VAULT_ACCESS_CREDS_SECRET + '@' + PAYMENT_ORCH_APP_DOMAIN + ':8080',
-    }
     headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer {}".format(access_token['access_token'])
     }
-    fin_instr_data = request.get_json()    
+    fin_instr_data = request.get_json()      
+    print("\n\n=== Aliassed Credit Card ===")
+    print(json.dumps(fin_instr_data, sort_keys=True, indent=4))
     fin_instr = requests.post(
         'https://' + PAYMENT_ORCH_APP_DOMAIN + '/financial_instruments',
-        headers = headers,
+        proxies = {
+            'https': 'https://' + CUSTOMER_VAULT_ACCESS_CREDS_USERNAME + ':' + CUSTOMER_VAULT_ACCESS_CREDS_SECRET + '@' + CUSTOMER_VAULT_ID + '.sandbox.verygoodproxy.com:8443',
+        },
+        headers=headers,
         json = fin_instr_data,
-        proxies = proxies,
-        verify = Path(__file__).resolve().parent / f'certs/sandbox_cert.pem'
+        verify = False,
+        # verify = Path(__file__).resolve().parent / f'certs/sandbox_cert.pem'
     )
+    print("\n\n=== Financial Instrument ===")
+    print(json.dumps(fin_instr.json(), sort_keys=True, indent=4))
     transfers_data = {
         "amount": 1 * 100,
         "currency": "USD",
@@ -60,8 +66,9 @@ def checkout():
         'https://' + PAYMENT_ORCH_APP_DOMAIN + '/transfers',
         headers = headers,
         json = transfers_data,
-        proxies = proxies,
-        verify = Path(__file__).resolve().parent / f'certs/sandbox_cert.pem'
     )
+    print("\n\n=== Transfer ===")
+    print(json.dumps(transfer.json(), sort_keys=True, indent=4))
+    
     return transfer.json()
 

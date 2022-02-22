@@ -22,8 +22,8 @@ PAYMENT_ORCH_CLIENT_SECRET=
 PAYMENT_ORCH_APP_DOMAIN=
 ``` 
 `CUSTOMER_VAULT_ID` - Your vault id for storing `credit-card` data \
-`CUSTOMER_VAULT_ACCESS_CREDS_USERNAME`, `CUSTOMER_VAULT_ACCESS_CREDS_SECRET` - Vault [access credentials](https://www.verygoodsecurity.com/docs/settings/access-credentials#access-credentials), user id and secret \
-`PAYMENT_ORCH_CLIENT_ID`, `PAYMENT_ORCH_CLIENT_SECRET` - [Credentials](https://www.verygoodsecurity.com/docs/settings/
+`CUSTOMER_VAULT_ACCESS_CREDS_USERNAME`, `CUSTOMER_VAULT_ACCESS_CREDS_SECRET` - Vault [access credentials](https://www.verygoodsecurity.com/docs/settings/access-credentials#generating-new-credentials), user id and secret \
+`PAYMENT_ORCH_CLIENT_ID`, `PAYMENT_ORCH_CLIENT_SECRET` - Payment orchestration [API Credentials](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/authentication#api-credentials), please request them at [support@verygoodsecurity.com](support@verygoodsecurity.com) or ask VGS representative.  \
 `PAYMENT_ORCH_APP_DOMAIN` - Domain of your Payment Orchescration application without `https` or `http` 
 
 ### How to run locally
