@@ -24,8 +24,7 @@ res = con.post do |req|
   req.url '/gateways' 
   # Here you pass the access token value by setting the `Authorization` header
   # with value as "Bearer #{access_token.token}"
-  # req.headers['Authorization'] = "Bearer #{access_token.token}"
-  req.headers['X-Auth-Token'] = token
+  req.headers['Authorization'] = "Bearer #{access_token.token}"
   req.headers['Content-Type'] = 'application/json'
   req.body = {
     id: "stripe-default",
