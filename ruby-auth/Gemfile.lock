@@ -21,6 +21,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  faraday (~> 2.2)
   oauth2 (~> 1.4)
 
 BUNDLED WITH

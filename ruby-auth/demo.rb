@@ -1,3 +1,4 @@
+require 'faraday'
 require 'oauth2'
 
 client_id = ENV["VGS_CLIENT_ID"]
@@ -15,11 +16,12 @@ access_token = client.client_credentials.get_token
 # Here's your token
 puts access_token.token
 
+con = Faraday.new 'https://tntsfeqzp4a.sandbox.verygoodproxy.com'
 # Then, for example, say you want to create a stripe gateway,
 # with the access token given if it has enough permission,
 # you can do this
 res = con.post do |req| 
-  req.url 'https://tntsfeqzp4a.sandbox.verygoodproxy.com/gateways' 
+  req.url '/gateways' 
   # Here you pass the access token value by setting the `Authorization` header
   # with value as "Bearer #{access_token.token}"
   req.headers['Authorization'] = "Bearer #{access_token.token}"
