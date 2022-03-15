@@ -2,15 +2,18 @@ html, body {
   margin: 0;
   padding: 0;
   text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: "Helvetica Neue", Helvetica;
 }
+
 h1 {
   padding: 20px 0;
 }
+
 #vgs-checkout {
   width: 450px;
   margin: 0 auto;
 }
+
 #reload {
   display: inline-block;
   margin: 0 auto;
@@ -21,9 +24,92 @@ h1 {
   text-decoration: none;
   display: none;
 }
-.demo-data_wr {
-  margin-top: 50px;
+
+form {
+  width: 480px;
 }
-.demo-data {
-  padding: 20px 0;
+
+button[type="submit"] {
+  display: block;
+  background-color: #35c2a1;
+  color: white;
+  box-shadow: 0 7px 14px 0 rgba(49, 49, 93, 0.10), 0 3px 6px 0 rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  border: 0;
+  margin-top: 20px;
+  font-size: 15px;
+  font-weight: 400;
+  width: 100%;
+  height: 40px;
+  line-height: 38px;
+  outline: none;
+  transition: .3s;
+}
+
+button:hover {
+  background: #2eb091;
+}
+
+button:focus {
+  background: #35c2a1;
+}
+
+button:active {
+  background: #35c2a1;
+}
+
+.group {
+  background: white;
+  box-shadow: 0 7px 14px 0 rgba(49, 49, 93, 0.10), 0 3px 6px 0 rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+label {
+  position: relative;
+  color: #8898AA;
+  font-weight: 300;
+  height: 40px;
+  line-height: 40px;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+.group label:not(:last-child) {
+  border-bottom: 1px solid #F0F5FA;
+}
+
+label > span {
+  width: 120px;
+  text-align: right;
+  margin-right: 30px;
+}
+
+.field {
+  background: transparent;
+  font-weight: 300;
+  border: 0;
+  color: #31325F;
+  outline: none;
+  flex: 1;
+  cursor: text;
+}
+
+.field::-webkit-input-placeholder {
+  color: #CFD7E0;
+}
+
+.field::-moz-placeholder {
+  color: #CFD7E0;
+}
+
+.collect-example pre {
+  font-family: "Consolas", monospace; 
+  font-size: 14px;
+}
+
+.collect-example iframe {
+  width: 100%;
+  height: 100%;
 }

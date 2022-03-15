@@ -50,7 +50,7 @@ data:
             - $.card.cvc
           transformer_config_map: null
           type: null
-      host_endpoint: tnthjkhlmbb.sandbox.verygoodproxy.com
+      host_endpoint: <pay_orch_vault_id>.sandbox.verygoodproxy.com
       id: a4ebaf1f-db4c-4df2-b17b-9fc91d7b4650
       ordinal: null
       port: 80

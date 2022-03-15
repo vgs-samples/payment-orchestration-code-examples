@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Orchestration Demo with VGS Collect.js</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1 class="text-4xl font-bold mb-10">Payment Orchestration with VGS Collect.js</h1>
+  <div class="container mx-auto flex justify-center space-x-0.5 flex-row collect-example">
+    <div class="basis-1/3">
+      <form id="collect-form">
+        <input type="hidden" name="token" />
+        <div class="group">
+           <label>
+            <span>Cardholder name</span>
+            <div id="card-name" class="field">
+              <!-- Placeholder for the Collect.js iframe -->
+            </div>
+          </label>
+          <label>
+            <span>Card number</span>
+            <div id="card-number" class="field">
+               <!-- Placeholder for the Collect.js iframe -->
+            </div>
+          </label>
+          <label>
+            <span>Expiry date</span>
+            <div id="card-expiry" class="field">
+               <!-- Placeholder for the Collect.js iframe -->
+            </div>
+          </label>
+          <label>
+            <span>CVC</span>
+            <div id="card-cvc" class="field">
+               <!-- Placeholder for the Collect.js iframe -->
+            </div>
+          </label>
+          <label>
+            <span>Zip code</span>
+            <div id="postal-code" class="field">
+               <!-- Placeholder for the Collect.js iframe -->
+            </div>
+          </label>
+        </div>
+        <button class="bg-emerald-400" id="submit-button" type="submit">Submit Payment</button>
+      </form>
+    </div>
+    <div class="basis-1/3 demo-data_wr">
+      <div class="shadow-md mb-10 rounded-md demo-data p-8">
+      <h2 class="text-xl font-bold mb-5">Test credit card data</h2>
+      <div class="space-y-1">
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Cardholder Name:&nbsp;</div>
+          <div class="basis-1/2 text-left">Thomas Anderson</div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Card number:&nbsp;</div>
+          <div class="basis-1/2 text-left">4242 4242 4242 4242</div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Expiration Date:&nbsp;</div>
+          <div class="basis-1/2 text-left">12/23</div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">CVC:&nbsp;</div>
+          <div class="basis-1/2 text-left">123</div>
+        </div>
+      </div>
+      </div>
+      <div class="shadow-md rounded-md result p-8">
+        <h2 class="text-xl font-bold mb-5 p-10">Transaction status</h2>
+        <pre id="response" class="text-left">Please fill in the form and click submit!</pre>
+      </div>
+    </div>
+  </div>
+  
+  <a href="" id="reload">Send one more time</a>
+
+  <!-- VGS Collect.js CDN url -->
+  <script src="https://js.verygoodvault.com/vgs-collect/2.12.0/vgs-collect.js"></script>
+  <script>
+    const response = document.getElementById('response');
+    const submitButton = document.getElementById('submit-button');
+    /**
+     * Collect Documentation: 
+     * https://www.verygoodsecurity.com/docs/vgs-collect/js/integration
+     **/
+    const form = VGSCollect.create('{{customerVaultId}}', 'sandbox', function(state) {});
+    const css = {
+      'font-family': '"Helvetica Neue", Helvetica',
+      'box-sizing': 'border-box',
+      'line-height': '1.5em',
+      'font-size': '14px',
+      'font-weight': '200',
+      'border': 'none',
+      'width': '100%',
+      'height': '100%',
+      '&::placeholder': {
+        'color': '#CFD7E0',
+      },
+    };
+
+    /**
+     * Field initialization Documentation: 
+     * https://www.verygoodsecurity.com/docs/vgs-collect/js/integration#form-initialization
+     **/
+    const name = form.field('#card-name', {
+      type: 'text',
+      name: 'card.name',
+      validations: ['required'],
+      autoComplete: 'cc-name',
+      css,
+      placeholder: 'John Doe',
+    });
+
+    const cardNumber = form.field('#card-number', {
+      type: 'card-number',
+      name: 'card.number',
+      validations: ['required', 'validCardNumber'],
+      autoComplete: 'cc-number',
+      showCardIcon: true,
+      css: css,
+      placeholder: '1234 1234 1234 1234',
+    });
+
+    const cvc = form.field('#card-cvc', {
+      type: 'card-security-code',
+      name: 'card.cvc',
+      validations: ['required', 'validCardSecurityCode'],
+      autoComplete: 'cc-csc',
+      css: css,
+      placeholder: 'CVC',
+    });
+
+    const expDate = form.field('#card-expiry', {
+      type: 'card-expiration-date',
+      name: 'card',
+      validations: ['required', 'validCardExpirationDate'],
+      serializers: [
+        form.SERIALIZERS.replace('(\\d{2})\\s\\/\\s(\\d{2})', '$1 / 20$2'),
+        form.SERIALIZERS.separate({ monthName: 'exp_month', yearName: 'exp_year'})
+      ],
+      autoComplete: 'cc-exp',
+      css: css,
+      placeholder: 'MM / YY',
+      yearLength: '2',
+    });
+
+    const postalCode = form.field('#postal-code', {
+      type: 'zip-code',
+      name: 'card.billing_address.postal_code',
+      validations: ['required'],
+      css: css,
+      placeholder: '94401',
+    });
+
+    /**
+     * Form Submission Documentation: 
+     * https://www.verygoodsecurity.com/docs/vgs-collect/js/integration#setup-form-submission
+     **/
+    const handleSubmit = (e) => {   
+      e.preventDefault();
+      submitButton.innerText = 'Processing...';
+      /**
+       * Request payload will have the following structure:
+       * 
+       * card: {
+       *     name: "John Doe",
+       *     cvc: "123",
+       *     number: "4111111111111111",
+       *     exp_month: "05",
+       *     exp_year: "2025",
+       *     billing_address: {
+       *         postal_code: "94505"
+       *     }
+       * }
+       **/
+      form.submit('/checkout', {
+        mapDotToObject: 'merge',
+      }, (status, data) => {
+          submitButton.innerText = 'Submit Payment';
+          if (status === 200) {
+            try {
+              const { amount, state, currency } = data.data;
+              const { id } = data.data.gateway;
+              if (state === "successful") {
+                document.getElementById('response').innerHTML = `
+                  State: ${state}
+                  Amount: ${amount}
+                  Currency: ${currency}
+                  Gateway ID: ${id}
+                `;
+              }
+            } catch (e) {
+              document.getElementById('response').innerHTML = `
+                State: error
+                Message: Transfer Error. Please check server logs.
+              `;
+            }
+          } else {
+            document.getElementById('response').innerHTML = `
+              State: error
+              Message: Server Error. Please check server logs.
+            `;
+          }
+      });
+    };
+
+    document.addEventListener('submit', handleSubmit);
+  </script>
+</body>
+</html>

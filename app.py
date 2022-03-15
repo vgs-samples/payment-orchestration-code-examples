@@ -24,14 +24,18 @@ def get_access_token():
         'client_id': PAYMENT_ORCH_CLIENT_ID,
         'client_secret': PAYMENT_ORCH_CLIENT_SECRET,
         'grant_type': 'client_credentials', 
-        'scope': 'transfers:write financial-instruments:write',
+        'scope': 'transfers:admin financial-instruments:admin',
     }
     response = requests.post(AUTH_API, data=data)
     return response.json()
         
 @app.route("/")
 def index():
-    return render_template('./index.html', customerVaultId = CUSTOMER_VAULT_ID)
+    return render_template('./checkout.html', customerVaultId = CUSTOMER_VAULT_ID)
+
+@app.route("/collect")
+def collect():
+    return render_template('./collect.html', customerVaultId = CUSTOMER_VAULT_ID)
 
 @app.route("/checkout", methods=['POST'])
 def checkout(): 

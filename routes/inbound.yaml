@@ -1,7 +1,7 @@
 data:
   - attributes:
       created_at: '2022-01-21T14:04:01'
-      destination_override_endpoint: 'https://b984-79-110-134-11.ngrok.io'
+      destination_override_endpoint: 'https://replace-with-your-ngrok-url.ngrok.io'
       entries:
         - classifiers: {}
           config:
