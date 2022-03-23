@@ -23,8 +23,8 @@ PAYMENT_ORCH_APP_DOMAIN=
 ``` 
 `CUSTOMER_VAULT_ID` - Your vault id for storing `credit-card` data \
 `CUSTOMER_VAULT_ACCESS_CREDS_USERNAME`, `CUSTOMER_VAULT_ACCESS_CREDS_SECRET` - Vault [access credentials](https://www.verygoodsecurity.com/docs/settings/access-credentials#access-credentials), user id and secret \
-`PAYMENT_ORCH_CLIENT_ID`, `PAYMENT_ORCH_CLIENT_SECRET` - [Credentials](https://www.verygoodsecurity.com/docs/settings/
-`PAYMENT_ORCH_APP_DOMAIN` - Domain of your Payment Orchescration application without `https` or `http` 
+`PAYMENT_ORCH_CLIENT_ID`, `PAYMENT_ORCH_CLIENT_SECRET` - [Credentials](https://www.verygoodsecurity.com/docs/settings/)
+`PAYMENT_ORCH_APP_DOMAIN` - Domain of your Payment Orchestration application without `https` or `http` 
 
 ### How to run locally
 1. `python -m venv venv`
@@ -39,7 +39,7 @@ PAYMENT_ORCH_APP_DOMAIN=
 ### How to run with Docker
 1. `docker-compose up --build`
 2. `ngrok http 5000` for sharing your localhost worldwide
-3. Setup ngrok link as upstream for Inbound route on the Dashboard
+3. Replace ngrok link as upstream for Inbound route on the Dashboard
 5. Open `http://localhost:5000` in browser
 
 ### How to use
