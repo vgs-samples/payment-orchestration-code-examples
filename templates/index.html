@@ -44,7 +44,7 @@
       environment: "sandbox",
       billingAddress: false,
       submitPath: '/checkout',
-      billingAddress: {
+      billingAddressConfiguration: {
         validCountries: ["US", "CA"]
       },
     });
@@ -69,7 +69,14 @@
         });
       } else {
         checkout.update({
-          formStatus: "error"
+          formStatus: "error",
+          labels: {
+            submit: {
+              error: {
+                message: `${data.data.gateway_response.message}`
+              }
+            }
+          }
         });
       }
       document.getElementById('reload').style.display = "inline-block"

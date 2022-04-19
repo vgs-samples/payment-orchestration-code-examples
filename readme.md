@@ -1,5 +1,5 @@
 ## VGS Universal Checkout & Payment Orchestration Integration Demo
-Before running the application, make sure, that you have access to your [Payment Orchestration Instance & API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/quickstart) and all prerequisites are met, gateways and rules are set and you have access credentials to authenticate.
+Before running the application, make sure, that you have access to your [Payment Orchestration Instance & API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/quickstart) and all prerequisites are met, gateways and rules are set, and you have access credentials to authenticate.
 
 This demo is built with:
 - [VGS Payment Orchestration product & API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration)
