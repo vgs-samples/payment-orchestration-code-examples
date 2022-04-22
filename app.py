@@ -23,45 +23,39 @@ def get_access_token():
     data = {
         'client_id': PAYMENT_ORCH_CLIENT_ID,
         'client_secret': PAYMENT_ORCH_CLIENT_SECRET,
-        'grant_type': 'client_credentials', 
-        'scope': 'transfers:write financial-instruments:write',
+        'grant_type': 'client_credentials'
     }
     response = requests.post(AUTH_API, data=data)
     return response.json()
         
 @app.route("/")
 def index():
-    return render_template('./index.html', customerVaultId = CUSTOMER_VAULT_ID)
+    access_token = get_access_token()
+    return render_template('./index.html', access_token = access_token['access_token'], customerVaultId = CUSTOMER_VAULT_ID)
+
+@app.route("/saved-cards")
+def saved_cards():
+    access_token = get_access_token()
+    return render_template('./saved-cards.html', access_token = access_token['access_token'], customerVaultId = CUSTOMER_VAULT_ID)
+
 
 @app.route("/checkout", methods=['POST'])
-def checkout(): 
+def checkout():
+    fin_instrument = request.get_json()
     access_token = get_access_token()
-    proxies = {
-        'https': 'http://' + CUSTOMER_VAULT_ACCESS_CREDS_USERNAME + ':' + CUSTOMER_VAULT_ACCESS_CREDS_SECRET + '@' + PAYMENT_ORCH_APP_DOMAIN + ':8080',
-    }
     headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer {}".format(access_token['access_token'])
-    }
-    fin_instr_data = request.get_json()    
-    fin_instr = requests.post(
-        'https://' + PAYMENT_ORCH_APP_DOMAIN + '/financial_instruments',
-        headers = headers,
-        json = fin_instr_data,
-        proxies = proxies,
-        verify = Path(__file__).resolve().parent / f'certs/sandbox_cert.pem'
-    )
+    }   
     transfers_data = {
         "amount": 1 * 100,
         "currency": "USD",
-        "source": fin_instr.json()['data']['id'],
+        "source": fin_instrument.get('id'),
     }
     transfer = requests.post(
-        'https://' + PAYMENT_ORCH_APP_DOMAIN + '/transfers',
+        'https://' + 'payments.sandbox.verygoodsecurity.app' + '/transfers',
         headers = headers,
         json = transfers_data,
-        proxies = proxies,
-        verify = Path(__file__).resolve().parent / f'certs/sandbox_cert.pem'
     )
     return transfer.json()
 
