@@ -9,15 +9,16 @@
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+
   <div class="flex flex-row items-center justify-center">
-    <h1 class="text-4xl font-bold">Universal Checkout: Default Flow</h1>
-    <a href="{{ url_for('saved_cards') }}">
+    <h1 class="text-4xl font-bold">Universal Checkout: Saved Cards Flow</h1>
+    <a href="{{ url_for('index') }}">
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-8 py-2 px-4 rounded text-sm">
-        Switch to Saved Crads flow
+        Switch to Default flow
       </button>
     </a>
   </div>
-  
+
   <div class="container mx-auto flex flex-row">
     <div class="basis-2/3"><div id="vgs-checkout"></div></div>
     <div class="basis-1/3 demo-data_wr">
@@ -46,11 +47,15 @@
   <a href="" id="reload">Send one more time</a>
   <script src="https://checkout.verygoodvault.com/v1/"></script>
   <script>
-    const checkout = new VGSCheckout.Checkout({
+    if (localStorage.getItem('savedCards')) {
+      var cardsList = localStorage.getItem('savedCards').split(',')
+    }
+    const checkout = new VGSCheckout.SavedCards({
       vaultId: "{{customerVaultId}}",
       environment: "sandbox",
       accessToken: "{{access_token}}",
       billingAddress: true ,
+      cardsList,
       billingAddressConfiguration: {
         validCountries: ["US"],
         country: {
@@ -74,8 +79,19 @@
           ctaLabel: "Pay $1"
         }
       },
+
     });
+
     checkout.on('SubmitSuccess', (data) => {
+      if (data.extra.saveCardChecked) {
+        console.log('qweqweqwe')
+        if (localStorage.hasOwnProperty('savedCards')) {
+          let savedCards = localStorage.getItem('savedCards')
+          localStorage.setItem('savedCards', savedCards + ',' + data.data.data.id)
+        } else {
+          localStorage.setItem('savedCards', data.data.data.id)
+        }
+      }
       fetch('/checkout', {
         method: 'POST',
         headers: {

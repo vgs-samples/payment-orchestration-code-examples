@@ -1,7 +1,7 @@
 data:
   - attributes:
-      created_at: '2022-01-21T14:04:01'
-      destination_override_endpoint: 'https://b984-79-110-134-11.ngrok.io'
+      created_at: '2022-03-28T18:24:05'
+      destination_override_endpoint: 'https://payments.sandbox.verygoodsecurity.app'
       entries:
         - classifiers: {}
           config:
@@ -12,19 +12,25 @@ data:
                   operator: matches
                   type: string
                   values:
-                    - /checkout
-          id: f2aeb97e-85df-402a-a2c7-88294274ccdb
+                    - /financial_instruments
+              - expression:
+                  field: ContentType
+                  operator: equals
+                  type: string
+                  values:
+                    - application/json
+          id: 8f42f918-24b6-4e4f-ac74-681fccb27303
           id_selector: null
           operation: REDACT
           operations: null
-          phase: REQUEST
-          public_token_generator: FPE_SIX_T_FOUR
+          phase: RESPONSE
+          public_token_generator: UUID
           targets:
             - body
-          token_manager: PERSISTENT
+          token_manager: VOLATILE
           transformer: JSON_PATH
           transformer_config:
-            - $.card.number
+            - $.data.card.cvc
           transformer_config_map: null
         - classifiers: {}
           config:
@@ -32,33 +38,39 @@ data:
             rules:
               - expression:
                   field: PathInfo
-                  operator: matches
+                  operator: equals
                   type: string
                   values:
-                    - /checkout
-          id: 5d5fdd09-e312-4806-a295-90c89e192e1a
+                    - /financial_instruments
+              - expression:
+                  field: ContentType
+                  operator: equals
+                  type: string
+                  values:
+                    - application/json
+          id: a77e7b52-cca5-49e3-9c92-914d66d31900
           id_selector: null
           operation: REDACT
           operations: null
-          phase: REQUEST
-          public_token_generator: FPE_SIX_T_FOUR
+          phase: RESPONSE
+          public_token_generator: UUID
           targets:
             - body
-          token_manager: VOLATILE
+          token_manager: PERSISTENT
           transformer: JSON_PATH
           transformer_config:
-            - $.card.cvc
+            - $.data.card.number
           transformer_config_map: null
       host_endpoint: (.*)\.verygoodproxy\.com
-      id: f1d753f4-be63-4e24-a25f-59a0819fc867
+      id: 2eed0a07-76c9-4d1d-afb0-daa0e7bf7e89
       ordinal: null
       port: 80
       protocol: http
       source_endpoint: '*'
       tags:
-        name: echo.apps.verygood.systems-beige-pentagon
+        name: Checkout/Payment Orchestration
         source: RouteContainer
-      updated_at: '2022-01-26T15:39:19'
-    id: f1d753f4-be63-4e24-a25f-59a0819fc867
+      updated_at: '2022-04-04T19:45:56'
+    id: 2eed0a07-76c9-4d1d-afb0-daa0e7bf7e89
     type: rule_chain
 version: 1

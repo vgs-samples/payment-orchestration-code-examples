@@ -1,5 +1,8 @@
 ## VGS Universal Checkout & Payment Orchestration Integration Demo
 Before running the application, make sure, that you have access to your [Payment Orchestration Instance & API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/quickstart) and all prerequisites are met, gateways and rules are set and you have access credentials to authenticate.
+This demo contain two flows: 
+- Default flow: Checkout create `finantial_instrument` in Payment Orchestration application
+- Saved Cards flow: Alow to use pre-saved `finantial_instruments`
 
 This demo is built with:
 - [VGS Payment Orchestration product & API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration)
@@ -11,15 +14,12 @@ This demo is built with:
 1. Clone the repo `git clone git@github.com:vgs-samples/payment-orchestration-demo.git`
 2. Create .env file in the root project folder
 3. Fill in the file with the necessary configuration variables shown below.
-4. Create Inbound and Outbound routes from .yaml files. You can find it in `./routes` folder
+4. Create Inbound routes from .yaml files. You can find it in `./routes` folder
 #### .env file - content description
 ```
 CUSTOMER_VAULT_ID=
-CUSTOMER_VAULT_ACCESS_CREDS_USERNAME=
-CUSTOMER_VAULT_ACCESS_CREDS_SECRET=
 PAYMENT_ORCH_CLIENT_ID=
 PAYMENT_ORCH_CLIENT_SECRET=
-PAYMENT_ORCH_APP_DOMAIN=
 ``` 
 `CUSTOMER_VAULT_ID` - Your vault id for storing `credit-card` data \
 `CUSTOMER_VAULT_ACCESS_CREDS_USERNAME`, `CUSTOMER_VAULT_ACCESS_CREDS_SECRET` - Vault [access credentials](https://www.verygoodsecurity.com/docs/settings/access-credentials#access-credentials), user id and secret \
