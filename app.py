@@ -81,9 +81,9 @@ def start_threeds_flow():
         "origin": origin,
         "browser_info": browser_info
     }
-    transfer = requests.post(
+    resp = requests.post(
         'https://' + 'payments.sandbox.verygoodsecurity.app' + '/3ds_authentications',
         headers = headers,
         json = authentication_data,
     )
-    return transfer.json()
+    return resp.json()
