@@ -119,7 +119,65 @@
     checkout.on('SubmitSuccess', (data) => {
       const threeDSFlow = document.getElementById("3ds-flow").checked
       const iframeContainer = document.getElementById("iframe-container")
-      
+
+      let vars = {}
+      // The process3DSAuth will be referenced inside process3DSAuth,
+      // I think we need this extra `vars` holder so that closure can capture it?
+      vars.process3DSAuth = (threeDSAuthentication) => {
+        console.info("Processing 3ds auth", threeDSAuthentication)
+        if (!threeDSAuthentication) {
+          return
+        }
+        const state = threeDSAuthentication.state
+          if (state === 'successful') {
+            checkout.update({
+              formStatus: "success"
+            });
+            return apiClient.createTransfer({
+              amount: 100,
+              currency: "USD",
+              // XXX: use real card id
+              source: "FNxsnzmA3Pv1yoDSebcr1waZ",
+              threeDSAuthentication: threeDSAuthentication.id,
+            }).then((resp)=> {
+              console.log(resp)
+              if (resp.data.state == 'successful') {
+                checkout.update({
+                  formStatus: "success"
+                });
+              } else {
+                checkout.update({
+                  formStatus: "error"
+                });
+              }
+              document.getElementById('reload').style.display = "inline-block"
+            });
+          } else if (state === 'device_fingerprint') {
+            return performAction(threeDSAuthentication, {
+              apiClient,
+              iframeContainer,
+              origin: apiURL,
+              decorateIframe: (iframe) => {
+                iframe.style.display = "none";
+              },
+            }).then(vars.process3DSAuth);
+          } else if (state === 'challenge') {
+            return performAction(threeDSAuthentication, {
+              apiClient,
+              iframeContainer,
+              origin: apiURL,
+              decorateIframe: (iframe) => {
+                iframe.style.width = "100%";
+                iframe.style.height = "550px";
+              },
+            }).then(vars.process3DSAuth);
+          } else {
+            checkout.update({
+              formStatus: "error"
+            });
+          }
+      }
+
       if (threeDSFlow) {
         const browserInfo = collectBrowserInfo()
         apiClient.createThreeDSAuthentication({
@@ -151,91 +209,7 @@
         // })
         // .then(response => response.json())
         .then((threeDSAuthentication) => {
-          console.log(threeDSAuthentication)
-          const state = threeDSAuthentication.state
-          if (state === 'successful') {
-            checkout.update({
-              formStatus: "success"
-            });
-            // TODO: continue transfer with the 3ds auth data
-          } else if (state === 'device_fingerprint') {
-            return performAction(threeDSAuthentication, {
-              apiClient,
-              iframeContainer,
-              origin: apiURL,
-              decorateIframe: (iframe) => {
-                iframe.style.display = "none";
-              },
-            });
-          } else if (state === 'challenge') {
-            return performAction(threeDSAuthentication, {
-              apiClient,
-              iframeContainer,
-              origin: apiURL,
-              decorateIframe: (iframe) => {
-                iframe.style.width = "100%";
-                iframe.style.height = "550px";
-              },
-            });
-          } else {
-            checkout.update({
-              formStatus: "error"
-            });
-          }
-        })
-        .then((threeDSAuthentication) => {
-          console.log(threeDSAuthentication)
-          const state = threeDSAuthentication.state
-          if (state === 'successful') {
-            checkout.update({
-              formStatus: "success"
-            });
-            // TODO: continue transfer with the 3ds auth data
-          } else if (state === 'challenge') {
-            return performAction(threeDSAuthentication, {
-              apiClient,
-              iframeContainer,
-              origin: window.location.origin,
-              decorateIframe: (iframe) => {
-                iframe.style.width = "100%";
-                iframe.style.height = "550px";
-              },
-            });
-          } else {
-            checkout.update({
-              formStatus: "error"
-            });
-          }
-        })
-        .then((threeDSAuthentication) => {
-          console.log(threeDSAuthentication)
-          const state = threeDSAuthentication.state
-          if (state === 'successful') {
-            return apiClient.createTransfer({
-              amount: 100,
-              currency: "USD",
-              source: "FNxsnzmA3Pv1yoDSebcr1waZ",
-              threeDSAuthentication: threeDSAuthentication.id,
-            });
-          } else {
-            checkout.update({
-              formStatus: "error"
-            });
-          }
-          document.getElementById('reload').style.display = "inline-block"
-        })
-        .then((resp) => {
-          console.log(resp)
-          if (resp.data.state == 'successful') {
-            checkout.update({
-              formStatus: "success"
-            });
-          } else {
-            checkout.update({
-              formStatus: "error"
-            });
-          }
-          document.getElementById('reload').style.display = "inline-block"
+          return vars.process3DSAuth(threeDSAuthentication)
         });
       } else {
         fetch('/checkout', {
