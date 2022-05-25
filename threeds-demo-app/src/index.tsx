@@ -31,4 +31,6 @@ import APIClient from "./api/client";
 (window as any).createForm = createForm;
 (window as any).getCurrentAction = getCurrentAction;
 (window as any).performAction = performAction;
+(window as any).waitForMessage = waitForMessage;
+(window as any).parseThreeDSAuthentication = parseThreeDSAuthentication;
 (window as any).APIClient = APIClient;
