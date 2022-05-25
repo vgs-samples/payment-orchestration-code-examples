@@ -73,17 +73,10 @@
   <!-- XXX: a dirty local build of checkout.js to use https://payments.sandbox.verygoodsecurity.app instead -->
   <script src="{{ url_for('static', filename='/dist/checkout.umd.js') }}"></script>
   <script>
-    const apiURL = "http://localhost:8080"
-    // const apiClient = new APIClient(
-    //   "https://payments.sandbox.verygoodsecurity.app",
-    //   {{ access_token | tojson }},
-    //   true
-    // );
-
+    const apiURL = "https://payments.sandbox.verygoodsecurity.app"
     const apiClient = new APIClient(
       apiURL,
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJtdWx0aXBsZXhpbmctYXBwLU1PQ0tfVkFVTFRfSUQtTU9DS19VU0VSTkFNRSIsInN1YiI6IjZkODJlOWFmLWQwZjMtNGQ5NS04MTFlLTljZGI3Y2ZiODhmOSIsImF6cCI6Im11bHRpcGxleGluZy1hcHAtTU9DS19WQVVMVF9JRC1NT0NLX1VTRVJOQU1FIiwianRpIjoiYjJlYzYxY2YtNDM3MS00ZjVhLWExYmYtOTVmMzA3MDE0Njg0IiwiY2xpZW50SWQiOiJtdWx0aXBsZXhpbmctYXBwLU1PQ0tfVkFVTFRfSUQtTU9DS19VU0VSTkFNRSIsInJlc291cmNlX2FjY2VzcyI6eyJtdWx0aXBsZXhpbmctYXBwLU1PQ0tfVkFVTFRfSUQtTU9DS19VU0VSTkFNRSI6eyJyb2xlcyI6WyJmaW5hbmNpYWwtaW5zdHJ1bWVudHM6d3JpdGUiLCJ0cmFuc2ZlcnM6YWRtaW4iXX19fQ.pfoSMzeEJSQ0qjAaJFC7-8m377tHmJ1n_mewpiXSk0c",
-      true
+      {{ access_token | tojson }},
     );
 
     const iframeContainer = document.getElementById("iframe-container")
@@ -177,39 +170,18 @@
     });
     checkout.on('SubmitSuccess', (data) => {
       const threeDSFlow = document.getElementById("3ds-flow").checked
-
+      const cardId = data.data.data.id
       if (threeDSFlow) {
         const browserInfo = collectBrowserInfo()
         apiClient.createThreeDSAuthentication({
-          card: "FNxsnzmA3Pv1yoDSebcr1waZ",
+          card: cardId,
           amount: 100,
           currency: "USD",
           origin: window.location.origin,
           browserInfo: collectBrowserInfo(),
         })
-        // fetch('/3ds_flow', {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //     "Accept": 'application/json',
-        //   },
-        //   body: JSON.stringify({
-        //     fin_instrument: data.data.data,
-        //     origin: window.location.origin,
-        //     browser_info: {
-        //       "java_enabled": browserInfo.javaEnabled,
-        //       "language": browserInfo.language,
-        //       "color_depth": browserInfo.colorDepth,
-        //       "screen_width": browserInfo.screenWidth,
-        //       "screen_height": browserInfo.screenHeight,
-        //       "timezone": browserInfo.timeZoneOffset,
-        //       "user_agent": browserInfo.userAgent,
-        //     }
-        //   }),
-        // })
-        // .then(response => response.json())
         .then((threeDSAuthentication) => {
-          return process3DSAuth(threeDSAuthentication, "FNxsnzmA3Pv1yoDSebcr1waZ")
+          return process3DSAuth(threeDSAuthentication, cardId)
         });
       } else {
         fetch('/checkout', {
