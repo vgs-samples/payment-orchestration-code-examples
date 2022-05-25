@@ -44,14 +44,41 @@
           <div class="basis-1/2 text-left">123</div>
         </div>
       </div>
+      <h2 class="text-xl font-bold mt-3">3DS demo credit card data</h2>
+      <div class="shadow-md rounded-md demo-data">
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Cardholder Name:&nbsp;</div>
+          <div class="basis-1/2 text-left">Thomas Anderson</div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Card number:&nbsp;</div>
+          <div class="basis-1/2 text-left">4917 6100 0000 0000</div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Expiration Date:&nbsp;</div>
+          <div class="basis-1/2 text-left">03/30</div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">CVC:&nbsp;</div>
+          <div class="basis-1/2 text-left">737</div>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="container mx-auto flex flex-row" id="iframe-container">
   </div>
   
   <a href="" id="reload">Send one more time</a>
-  <script src="{{ url_for('static', filename='/main.259b2da5.js') }}"></script>
+  <script src="{{ url_for('static', filename='/main.8f326946.js') }}"></script>
   <!-- XXX: a dirty local build of checkout.js to use https://payments.sandbox.verygoodsecurity.app instead -->
   <script src="{{ url_for('static', filename='/dist/checkout.umd.js') }}"></script>
   <script>
+    const apiClient = new APIClient(
+      "https://payments.sandbox.verygoodsecurity.app",
+      {{ access_token | tojson }},
+      true
+    );
+
     const checkout = new VGSCheckout.Checkout({
       vaultId: "{{customerVaultId}}",
       environment: "sandbox",
@@ -83,6 +110,8 @@
     });
     checkout.on('SubmitSuccess', (data) => {
       const threeDSFlow = document.getElementById("3ds-flow").checked
+      const iframeContainer = document.getElementById("iframe-container")
+      
       if (threeDSFlow) {
         const browserInfo = collectBrowserInfo()
         fetch('/3ds_flow', {
@@ -108,9 +137,28 @@
         .then(response => response.json())
         .then((data) => {
           console.log(data)
-          if (data.data.state == 'successful') {
+          if (data.data.state === 'successful') {
             checkout.update({
               formStatus: "success"
+            });
+          } else if (data.data.state === 'device_fingerprint') {
+            return performAction(threeDSAuthentication, {
+              apiClient,
+              iframeContainer,
+              origin: window.location.origin,
+              decorateIframe: (iframe) => {
+                iframe.style.display = "none";
+              },
+            });
+          } else if (data.data.state === 'challenge') {
+            return performAction(threeDSAuthentication, {
+              apiClient,
+              iframeContainer,
+              origin: window.location.origin,
+              decorateIframe: (iframe) => {
+                iframe.style.width = "100%";
+                iframe.style.height = "550px";
+              },
             });
           } else {
             checkout.update({

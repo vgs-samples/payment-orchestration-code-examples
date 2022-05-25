@@ -6,6 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 import { collectBrowserInfo } from "./browserInfo";
 import { createIframe } from "./iframe";
 import { createForm } from "./form";
+import { getCurrentAction, performAction } from "./action";
+import APIClient from "./api/client";
 
 // const root = ReactDOM.createRoot(
 //   document.getElementById('root') as HTMLElement
@@ -27,3 +29,6 @@ import { createForm } from "./form";
 (window as any).collectBrowserInfo = collectBrowserInfo;
 (window as any).createIframe = createIframe;
 (window as any).createForm = createForm;
+(window as any).getCurrentAction = getCurrentAction;
+(window as any).performAction = performAction;
+(window as any).APIClient = APIClient;
