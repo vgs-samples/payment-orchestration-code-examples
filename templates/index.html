@@ -19,7 +19,11 @@
   </div>
   
   <div class="container mx-auto flex flex-row">
-    <div class="basis-2/3"><div id="vgs-checkout"></div></div>
+    <div class="basis-2/3">
+      <div id="vgs-checkout"></div>
+      <input type="checkbox" id="3ds-flow" name="3ds-flow">
+      <label for="3ds-flow">3DS Flow</label>
+    </div>
     <div class="basis-1/3 demo-data_wr">
       <h2 class="text-xl font-bold">Demo credit card data</h2>
       <div class="shadow-md rounded-md demo-data">
@@ -44,7 +48,9 @@
   </div>
   
   <a href="" id="reload">Send one more time</a>
-  <script src="https://checkout.verygoodvault.com/v1/"></script>
+  <script src="{{ url_for('static', filename='/main.259b2da5.js') }}"></script>
+  <!-- XXX: a dirty local build of checkout.js to use https://payments.sandbox.verygoodsecurity.app instead -->
+  <script src="{{ url_for('static', filename='/dist/checkout.umd.js') }}"></script>
   <script>
     const checkout = new VGSCheckout.Checkout({
       vaultId: "{{customerVaultId}}",
@@ -76,28 +82,67 @@
       },
     });
     checkout.on('SubmitSuccess', (data) => {
-      fetch('/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          "Accept": 'application/json',
-        },
-        body: JSON.stringify(data.data.data),
-      })
-      .then(response => response.json())
-      .then((data) => {
-        console.log(data)
-        if (data.data.state == 'successful') {
-          checkout.update({
-            formStatus: "success"
-          });
-        } else {
-          checkout.update({
-            formStatus: "error"
-          });
-        }
-        document.getElementById('reload').style.display = "inline-block"
-      });
+      const threeDSFlow = document.getElementById("3ds-flow").checked
+      if (threeDSFlow) {
+        const browserInfo = collectBrowserInfo()
+        fetch('/3ds_flow', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            "Accept": 'application/json',
+          },
+          body: JSON.stringify({
+            fin_instrument: data.data.data,
+            origin: window.location.origin,
+            browser_info: {
+              "java_enabled": browserInfo.javaEnabled,
+              "language": browserInfo.language,
+              "color_depth": browserInfo.colorDepth,
+              "screen_width": browserInfo.screenWidth,
+              "screen_height": browserInfo.screenHeight,
+              "timezone": browserInfo.timeZoneOffset,
+              "user_agent": browserInfo.userAgent,
+            }
+          }),
+        })
+        .then(response => response.json())
+        .then((data) => {
+          console.log(data)
+          if (data.data.state == 'successful') {
+            checkout.update({
+              formStatus: "success"
+            });
+          } else {
+            checkout.update({
+              formStatus: "error"
+            });
+          }
+          document.getElementById('reload').style.display = "inline-block"
+        });
+      } else {
+        fetch('/checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            "Accept": 'application/json',
+          },
+          body: JSON.stringify(data.data.data),
+        })
+        .then(response => response.json())
+        .then((data) => {
+          console.log(data)
+          if (data.data.state == 'successful') {
+            checkout.update({
+              formStatus: "success"
+            });
+          } else {
+            checkout.update({
+              formStatus: "error"
+            });
+          }
+          document.getElementById('reload').style.display = "inline-block"
+        });
+      }
     })
 
     checkout.on('SubmitFail', ({ data }) => {

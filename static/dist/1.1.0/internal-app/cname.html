@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure Checkout Form</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    
+    <script type="module" crossorigin src="/1.1.0/assets/vendor.93ccdf54.js"></script>
+    <script type="module" crossorigin src="/1.1.0/assets/main.ec4effc5.js"></script>
+    <link rel="stylesheet" href="/1.1.0/assets/cname.109c637a.css">
+  </head>
+  <body>
+    <!--# include virtual="/js/vgs-checkout/checkout-configs/$inc.txt" set="cname" -->
+    <!--# if expr="$cname != /^([^\<\>]+)\$/" -->
+    <!--# set var="cname" value="" -->
+    <!--# endif -->
+    <script>
+      var vaultUrl = '<!--# echo var="cname" encoding="url" -->';
+    </script>
+    <div id="app"></div>
+    
+  </body>
+</html>
