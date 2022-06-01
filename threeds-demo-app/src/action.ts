@@ -1,3 +1,4 @@
+import { TryAgainError } from "./api/client";
 import APIInterface, {
   ThreeDSAction,
   ThreeDSAuthentication,
@@ -51,39 +52,85 @@ export const performAction = async (
       ? 10 * 1000
       : 10 * 60 * 1000;
 
-  const messagePromise = waitForMessage(
-    (event) => event.origin === option.origin,
-    timeout
-  );
-  form.submit();
-  let messageTimeout = false;
-  try {
-    const message = await messagePromise;
-    console.info("Receive post notification message", message);
-  } catch {
-    console.info("Timeout while waiting for post notification message");
-    messageTimeout = true;
+  let messagePromise: Promise<MessageEvent<any>> | null = null;
+  if (action.waitForMessage) {
+    messagePromise = waitForMessage(
+      (event) => event.origin === option.origin,
+      timeout
+    );
   }
-  iframe.parentElement?.removeChild(iframe);
-  switch (threeDSAuthentication?.state) {
-    case "device_fingerprint": {
-      const completeIndicator = !messageTimeout;
-      const resp = await option.apiClient.finishDeviceFingerprint(
-        threeDSAuthentication.id,
-        completeIndicator
-      );
-      return resp;
+  form.submit();
+  if (action.waitForMessage) {
+    // Waiting for notification msgs
+    let messageTimeout = false;
+    try {
+      const message = await messagePromise!;
+      console.info("Receive post notification message", message);
+    } catch {
+      console.info("Timeout while waiting for post notification message");
+      messageTimeout = true;
     }
-    case "challenge": {
-      const transStatus = messageTimeout ? "N" : "Y";
-      const resp = await option.apiClient.finishChallenge(
-        threeDSAuthentication.id,
-        transStatus
-      );
-      return resp;
+    iframe.parentElement?.removeChild(iframe);
+    switch (threeDSAuthentication?.state) {
+      case "device_fingerprint": {
+        const completeIndicator = !messageTimeout;
+        const resp = await option.apiClient.finishDeviceFingerprint(
+          threeDSAuthentication.id,
+          completeIndicator
+        );
+        return resp;
+      }
+      case "challenge": {
+        const transStatus = messageTimeout ? "N" : "Y";
+        const resp = await option.apiClient.finishChallenge(
+          threeDSAuthentication.id,
+          transStatus
+        );
+        return resp;
+      }
+      default: {
+        throw new Error(`Invalid state ${threeDSAuthentication.state}`);
+      }
     }
-    default: {
-      throw new Error(`Invalid state ${threeDSAuthentication.state}`);
+  } else {
+    try {
+      const beginTime = new Date().getTime();
+      while (new Date().getTime() - beginTime < timeout) {
+        try {
+          switch (threeDSAuthentication?.state) {
+            case "device_fingerprint": {
+              const completeIndicator = true;
+              const resp = await option.apiClient.finishDeviceFingerprint(
+                threeDSAuthentication.id,
+                // Not really needed for Paay, just for the interface
+                completeIndicator
+              );
+              return resp;
+            }
+            case "challenge": {
+              const transStatus = "Y";
+              const resp = await option.apiClient.finishChallenge(
+                threeDSAuthentication.id,
+                // Not really needed for Paay, just for the interface
+                transStatus
+              );
+              return resp;
+            }
+            default: {
+              throw new Error(`Invalid state ${threeDSAuthentication.state}`);
+            }
+          }
+        } catch (error) {
+          if (error instanceof TryAgainError) {
+            console.info("Encounter try again error, will try again");
+            continue;
+          } else {
+            throw error;
+          }
+        }
+      }
+    } finally {
+      iframe.parentElement?.removeChild(iframe);
     }
   }
 };

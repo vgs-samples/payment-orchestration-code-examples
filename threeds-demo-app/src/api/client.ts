@@ -12,6 +12,12 @@ import {
   parseTransfer,
 } from "./parsers";
 
+export class TryAgainError extends Error {
+  constructor(m: string) {
+      super(m);
+  }
+}
+
 export default class APIClient implements APIInterface {
   private baseURL: string;
   private authToken: string;
@@ -118,6 +124,9 @@ export default class APIClient implements APIInterface {
       }),
     });
     const resp = await fetch(request);
+    if (resp.status == 499) {
+      throw new TryAgainError('Try again later')
+    }
     if (resp.status >= 400) {
       throw new Error(
         `Bad response status ${resp.status} for device fingerprint`
@@ -140,6 +149,9 @@ export default class APIClient implements APIInterface {
       }),
     });
     const resp = await fetch(request);
+    if (resp.status == 499) {
+      throw new TryAgainError('Try again later')
+    }
     if (resp.status >= 400) {
       throw new Error(`Bad response status ${resp.status} for challenge`);
     }

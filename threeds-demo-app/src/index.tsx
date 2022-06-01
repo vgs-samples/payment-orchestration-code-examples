@@ -8,6 +8,8 @@ import { createIframe } from "./iframe";
 import { createForm } from "./form";
 import { getCurrentAction, performAction } from "./action";
 import APIClient from "./api/client";
+import { waitForMessage } from "./message";
+import { parseThreeDSAuthentication } from "./api/parsers";
 
 // const root = ReactDOM.createRoot(
 //   document.getElementById('root') as HTMLElement

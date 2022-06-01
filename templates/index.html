@@ -69,14 +69,16 @@
   </div>
   
   <a href="" id="reload">Send one more time</a>
-  <script src="{{ url_for('static', filename='/main.8f326946.js') }}"></script>
+  <script src="{{ url_for('static', filename='/main.76efbd13.js') }}"></script>
   <!-- XXX: a dirty local build of checkout.js to use https://payments.sandbox.verygoodsecurity.app instead -->
   <script src="{{ url_for('static', filename='/dist/checkout.umd.js') }}"></script>
   <script>
-    const apiURL = "https://payments.sandbox.verygoodsecurity.app"
+    // const apiURL = "https://payments.sandbox.verygoodsecurity.app"
+    const apiURL = "http://localhost:8080"
     const apiClient = new APIClient(
       apiURL,
       {{ access_token | tojson }},
+      true
     );
 
     const iframeContainer = document.getElementById("iframe-container")
@@ -170,7 +172,7 @@
     });
     checkout.on('SubmitSuccess', (data) => {
       const threeDSFlow = document.getElementById("3ds-flow").checked
-      const cardId = data.data.data.id
+      const cardId = "FN9FX3SDvVYcv43GTFjJBabL"
       if (threeDSFlow) {
         const browserInfo = collectBrowserInfo()
         apiClient.createThreeDSAuthentication({
