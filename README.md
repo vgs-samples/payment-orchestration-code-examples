@@ -27,7 +27,7 @@ PAYMENT_ORCH_CLIENT_ID=
 PAYMENT_ORCH_CLIENT_SECRET=
 ``` 
 - `CUSTOMER_VAULT_ID` - Your vault id for storing cards data
-- `PAYMENT_ORCH_CLIENT_ID`, `PAYMENT_ORCH_CLIENT_SECRET` - [Credentials](https://www.verygoodsecurity.com/docs/payment-optimization/authentication)
+- `PAYMENT_ORCH_CLIENT_ID`, `PAYMENT_ORCH_CLIENT_SECRET` - [Payment Orchestration documentation](https://www.verygoodsecurity.com/docs/payment-optimization/authentication)
 - `PAYMENT_ORCH_APP_DOMAIN` - Domain of Payment Orchestration application without `https` or `http` 
 
 ### How to run locally
