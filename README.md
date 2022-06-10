@@ -36,15 +36,11 @@ PAYMENT_ORCH_CLIENT_SECRET=
 3. `export FLASK_APP=app`
 4. `pip install -r ./requirements.txt`
 5. `flask run`
-6. `ngrok http 5000` for sharing your localhost worldwide
-7. Setup [ngrok](https://ngrok.com/) link as upstream for Inbound route on the Dashboard
-8. Open `http://localhost:5000` in browser
+6. Open `http://localhost:5000` in browser
 
 ### How to run with Docker
 1. `docker-compose up --build`
-2. `ngrok http 5000` for sharing your localhost worldwide
-3. Setup [ngrok](https://ngrok.com/) link as upstream for Inbound route on the Dashboard
-5. Open `http://localhost:5000` in browser
+2. Open `http://localhost:5000` in browser
 
 ### How to use
 Fill and submit the Universal Checkout form with a test payment card. Please note that a test payment card depends on the gateway you use and can be different if you want to try a successful transaction flow.
