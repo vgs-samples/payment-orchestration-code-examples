@@ -59,3 +59,31 @@ def checkout():
     )
     return transfer.json()
 
+
+
+@app.route("/3ds_flow", methods=['POST'])
+def start_threeds_flow():
+    payload = request.get_json()
+
+    fin_instrument = payload["fin_instrument"]
+    origin = payload["origin"]
+    browser_info = payload["browser_info"]
+
+    access_token = get_access_token()
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {}".format(access_token['access_token'])
+    }   
+    authentication_data = {
+        "card": fin_instrument.get('id'),
+        "amount": 1 * 100,
+        "currency": "USD",
+        "origin": origin,
+        "browser_info": browser_info
+    }
+    resp = requests.post(
+        'https://' + 'payments.sandbox.verygoodsecurity.app' + '/3ds_authentications',
+        headers = headers,
+        json = authentication_data,
+    )
+    return resp.json()

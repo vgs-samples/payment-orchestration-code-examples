@@ -4,3 +4,4 @@ ngrok
 .python-version
 .env
 .DS_Store
+threeds-demo-app/node_modules
