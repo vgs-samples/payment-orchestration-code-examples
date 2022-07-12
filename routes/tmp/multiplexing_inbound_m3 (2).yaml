@@ -1,0 +1,463 @@
+data:
+  - attributes:
+      created_at: '2022-05-20T07:40:40'
+      destination_override_endpoint: 'https://multiplexing.sandbox.verygoodsecurity.app'
+      entries:
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: Method
+                  operator: equals
+                  type: string
+                  values:
+                    - POST
+              - condition: OR
+                rules:
+                  - expression:
+                      field: PathInfo
+                      operator: matches
+                      type: string
+                      values:
+                        - /gateways
+                  - expression:
+                      field: PathInfo
+                      operator: matches
+                      type: string
+                      values:
+                        - /3ds_providers
+          id: 2a54aa12-1754-435f-a3d5-d2139f42098d
+          id_selector: null
+          operation: REDACT
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/LarkyHttp
+              parameters:
+                script: |-
+                  load('@stdlib//json', 'json')
+                  def process(input, ctx):
+                    body = json.loads(input.body())
+
+                    for k, v in body['config'].items():
+                      if k != 'endpoint':
+                        body['config'][k] = vault.put(v)
+                    new_body = json.dumps(body)
+                    return input.set_body(new_body)
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.account_number
+          transformer_config_map: null
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: Method
+                  operator: equals
+                  type: string
+                  values:
+                    - POST
+              - condition: OR
+                rules:
+                  - expression:
+                      field: PathInfo
+                      operator: matches
+                      type: string
+                      values:
+                        - /gateways
+                  - expression:
+                      field: PathInfo
+                      operator: matches
+                      type: string
+                      values:
+                        - /3ds_providers
+          id: 299d5b77-dbce-46a6-b10e-9ebd9beb6e28
+          id_selector: null
+          operation: REDACT
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/LarkyHttp
+              parameters:
+                script: |-
+                  load('@stdlib//json', 'json')
+                  def process(input, ctx):
+                    if input.status_code() >= 300:
+                      return input
+                    body = json.loads(input.body())
+
+                    for k, v in body['data']['config'].items():
+                      body['data']['config'][k] = vault.reveal(v)
+                    new_body = json.dumps(body)
+                    return input.set_body(new_body)
+          phase: RESPONSE
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.account_number
+          transformer_config_map: null
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: Method
+                  operator: equals
+                  type: string
+                  values:
+                    - GET
+              - condition: OR
+                rules:
+                  - expression:
+                      field: PathInfo
+                      operator: matches
+                      type: string
+                      values:
+                        - /gateways
+                  - expression:
+                      field: PathInfo
+                      operator: matches
+                      type: string
+                      values:
+                        - /3ds_providers
+          id: 189c79e0-75ef-4357-9bf9-3447cf813743
+          id_selector: null
+          operation: REDACT
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/LarkyHttp
+              parameters:
+                script: |-
+                  load('@stdlib//json', 'json')
+                  def process(input, ctx):
+                    if input.status_code() >= 300:
+                      return input
+                    body = json.loads(input.body())
+
+                    for gateway in body['data']:
+                      for k, v in gateway.get('config', {}).items():
+                        gateway['config'][k] = vault.reveal(v)
+                    new_body = json.dumps(body)
+                    return input.set_body(new_body)
+          phase: RESPONSE
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.account_number
+          transformer_config_map: null
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: Method
+                  operator: equals
+                  type: string
+                  values:
+                    - GET
+              - condition: OR
+                rules:
+                  - expression:
+                      field: PathInfo
+                      operator: begins_with
+                      type: string
+                      values:
+                        - /gateways/
+                  - expression:
+                      field: PathInfo
+                      operator: begins_with
+                      type: string
+                      values:
+                        - /3ds_providers/
+          id: ddf980b6-9a47-4868-8f71-cfb3925d0e5b
+          id_selector: null
+          operation: REDACT
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/LarkyHttp
+              parameters:
+                script: |-
+                  load('@stdlib//json', 'json')
+                  def process(input, ctx):
+                    if input.status_code() >= 300:
+                      return input
+                    body = json.loads(input.body())
+
+                    for k, v in body['data']['config'].items():
+                      body['data']['config'][k] = vault.reveal(v)
+                    new_body = json.dumps(body)
+                    return input.set_body(new_body)
+          phase: RESPONSE
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.account_number
+          transformer_config_map: null
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: Method
+                  operator: equals
+                  type: string
+                  values:
+                    - POST              
+              - condition: OR
+                rules:
+                  - expression:
+                      field: PathInfo
+                      operator: matches
+                      type: string
+                      values:
+                        - /financial_instruments
+                  - expression:
+                      field: PathInfo
+                      operator: matches
+                      type: string
+                      values:
+                        - /verifications
+          id: 1a7abc06-64c0-4de2-ab39-0b7f877e4973
+          id_selector: null
+          operation: REDACT
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/LarkyHttp
+              parameters:
+                script: |-
+                  load('@stdlib//json', 'json')
+                  load("@stdlib//re", "re")
+                  def process(input, ctx):
+                    body = json.loads(input.body())
+                    if 'card' in body and 'number' in body['card']:
+                      brand = "Unknown"
+                      number = vault.reveal(body['card']['number'])
+                      bin = number[:6]
+                      brands = {"Visa": "^4[0-9]{6,}$",
+                                "Mastercard": "^5[1-5][0-9]{5,}|222[1-9][0-9]{3,}|22[3-9][0-9]{4,}|2[3-6][0-9]{5,}|27[01][0-9]{4,}|2720[0-9]{3,}$"}
+                      for key, value in brands.items():
+                        if re.match(value, number):
+                          bin = number[:8]
+                          break
+                      body['card']['bin'] = bin
+                      body['card']['last4'] = number[len(number) - 4:]
+                      body['card']['number'] = vault.put(body['card']['number'])
+                      body['card']['cvc'] = vault.put(body['card']['cvc'], storage="VOLATILE")
+                      body['card']['name'] = vault.put(body['card'].get('name'))
+                      if 'billing_address' in body['card']:
+                        if 'name' in body['card']['billing_address']:
+                          body['card']['billing_address']['name'] = vault.put(body['card']['billing_address'].get('name'))           
+                        if 'address1' in body['card']['billing_address']:
+                          body['card']['billing_address']['address1'] = vault.put(body['card']['billing_address'].get('address1'))                        
+                        if 'address2' in body['card']['billing_address']:
+                          body['card']['billing_address']['address2'] = vault.put(body['card']['billing_address'].get('address2'))
+                    new_body = json.dumps(body)
+                    return input.set_body(new_body)
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.card.number
+          transformer_config_map: null
+        - classifiers: {}
+          config:
+            condition: OR
+            rules:
+              - condition: OR
+                rules:
+                  - expression:
+                      field: PathInfo
+                      operator: matches
+                      type: string
+                      values:
+                        - /financial_instruments
+                  - expression:
+                      field: PathInfo
+                      operator: matches
+                      type: string
+                      values:
+                        - /verifications
+              - condition: AND
+                rules:
+                  - expression:
+                      field: Method
+                      operator: equals
+                      type: string
+                      values:
+                        - GET
+                  - expression:
+                      field: PathInfo
+                      operator: begins_with
+                      type: string
+                      values:
+                        - /financial_instruments/
+          id: a473900c-6771-4c02-98fa-39cc93a99989
+          id_selector: null
+          operation: REDACT
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/LarkyHttp
+              parameters:
+                script: |-
+                  load('@stdlib//json', 'json')
+                  def process(input, ctx):
+                    if input.status_code() >= 300:
+                      return input
+                    body = json.loads(input.body())
+                    data = body['data']
+                    if 'card' in data and 'number' in data['card']:
+                      data['card']['name'] = vault.reveal(data['card'].get('name'))
+                      if 'billing_address' in data['card']:
+                        if 'name' in data['card']['billing_address']:
+                          data['card']['billing_address']['name'] = vault.reveal(data['card']['billing_address'].get('name'))           
+                        if 'address1' in data['card']['billing_address']:
+                          data['card']['billing_address']['address1'] = vault.reveal(data['card']['billing_address'].get('address1'))                        
+                        if 'address2' in data['card']['billing_address']:
+                          data['card']['billing_address']['address2'] = vault.reveal(data['card']['billing_address'].get('address2'))
+                    body['data'] = data
+                    new_body = json.dumps(body)
+                    return input.set_body(new_body)
+          phase: RESPONSE
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.account_number
+          transformer_config_map: null
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: Method
+                  operator: equals
+                  type: string
+                  values:
+                    - GET
+              - expression:
+                  field: PathInfo
+                  operator: equals
+                  type: string
+                  values:
+                    - /financial_instruments
+          id: 97fbd63f-c19c-4493-8e45-5b68446ec563
+          id_selector: null
+          operation: REDACT
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/LarkyHttp
+              parameters:
+                script: |-
+                  load('@stdlib//json', 'json')
+                  def process(input, ctx):
+                    if input.status_code() >= 300:
+                      return input
+                    body = json.loads(input.body())
+                    data = body['data']
+                    for fi in data:
+                      for k, v in fi.items():
+                        if k == 'card':
+                          fi['card']['name'] = vault.reveal(fi['card']['name'])
+                          if 'billing_address' in fi['card']:
+                            if 'name' in fi['card']['billing_address']:
+                              fi['card']['billing_address']['name'] = vault.reveal(fi['card']['billing_address'].get('name'))           
+                            if 'address1' in fi['card']['billing_address']:
+                              fi['card']['billing_address']['address1'] = vault.reveal(fi['card']['billing_address'].get('address1'))                        
+                            if 'address2' in fi['card']['billing_address']:
+                              fi['card']['billing_address']['address2'] = vault.reveal(fi['card']['billing_address'].get('address2'))                          
+                    body['data'] = data
+                    new_body = json.dumps(body)
+                    return input.set_body(new_body)
+          phase: RESPONSE
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.account_number
+          transformer_config_map: null
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: PathInfo
+                  operator: matches
+                  type: string
+                  values:
+                    - /transfers
+              - expression:
+                  field: Method
+                  operator: equals
+                  type: string
+                  values:
+                    - POST
+          id: c56bf99b-ece1-46dd-8f94-d5362917abc4
+          id_selector: null
+          operation: ENRICH
+          operations: null
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.source_override.card.number
+          transformer_config_map: null
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: PathInfo
+                  operator: matches
+                  type: string
+                  values:
+                    - /transfers
+              - expression:
+                  field: Method
+                  operator: equals
+                  type: string
+                  values:
+                    - POST
+          id: d76a0c8d-37f3-4c04-8907-0700d308fb03
+          id_selector: null
+          operation: ENRICH
+          operations: null
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: VOLATILE
+          transformer: JSON_PATH
+          transformer_config:
+            - $.source_override.card.cvc
+          transformer_config_map: null
+      host_endpoint: (tntipgdjdyl\.sandbox\.payments\.verygoodsecurity\.app)|((.*)\.verygoodproxy\.com)
+      id: 4880868f-d88b-4333-ab70-d9deecdbffc4
+      ordinal: 0
+      port: 0
+      protocol: http
+      source_endpoint: '*'
+      tags:
+        app.vgs.io/fqn: verygoodsecurity/payment-orchestration
+        app.vgs.io/name: payment-orchestration
+        name: Payment Orchestration Inbound
+      updated_at: '2022-06-29T13:30:37'
+    id: 4880868f-d88b-4333-ab70-d9deecdbffc4
+    type: rule_chain
+version: 1
