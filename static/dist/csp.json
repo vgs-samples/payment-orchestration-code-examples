@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "style-src": ["'unsafe-inline'"],
+    "img-src": [
+      "data:",
+      "https://checkout.verygoodvault.com",
+      "https://js.verygoodvault.com"
+    ],
+    "script-src": [
+      "'unsafe-inline'",
+      "https://checkout.verygoodvault.com",
+      "https://js.verygoodvault.com"
+    ]
+  },
+  "report-uri": [""]
+}
