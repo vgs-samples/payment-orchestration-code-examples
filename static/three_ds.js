@@ -47,6 +47,9 @@ const tryDeviceFingerprint = (data) => {
   document.body.appendChild(iframe);
 }
 
+const tryChallengeFlow = (data) => {
+  console.log('Challenge Flow ==>', data)
+}
 
 const threeDsAuth = () => {
   const fId = document.getElementById('fin_id_input').value
@@ -79,6 +82,9 @@ const threeDsAuth = () => {
     console.log('3ds_authentications ==>', data.data)    
     if (data.data.state === "device_fingerprint") {
       tryDeviceFingerprint(data)
+    }
+    if (data.data.state === "challenge") {
+      tryChallengeFlow(data)
     }
     if (data.data.state === "successful") {
       makeTransferWith3DS(fId, data)
