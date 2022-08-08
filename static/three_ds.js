@@ -1,4 +1,4 @@
-const amount = 1
+const amount = 1000
 const currency = "USD"
 const vgsUrl = 'https://tntipgdjdyl-4880868f-d88b-4333-ab70-d9deecdbffc4.sandbox.verygoodproxy.com'
 const readAccessToken = () => document.getElementById('token').textContent
@@ -14,7 +14,7 @@ const makeTransferWith3DS = (fId, threeDsData) => {
       "amount": amount,
       "currency": currency,
       "source": fId,
-      "three_ds_authentication": threeDsData.data.id
+      // "three_ds_authentication": threeDsData.data.id
     })
   })
   .then((response) => response.json())
@@ -26,7 +26,7 @@ const makeTransferWith3DS = (fId, threeDsData) => {
 const tryDeviceFingerprint = (data) => {
   window.addEventListener('message', message => {
     console.log('message from iframe', message.data)
-    fetch(`${vgsUrl}/3ds_authentications/${data.data.id}/fingerprints`, {
+    fetch(`${vgsUrl}/threeds_authentications/${data.data.id}/fingerprints`, {
       method: 'POST',
       headers: {
         "Authorization": `Bearer ${readAccessToken()}`,
@@ -49,6 +49,31 @@ const tryDeviceFingerprint = (data) => {
 
 const tryChallengeFlow = (data) => {
   console.log('Challenge Flow ==>', data)
+  var iframe = document.createElement('iframe');
+  iframe.src = `${data.data.challenge.url}?creq=${data.data.challenge.params.creq}`
+  iframe.width = 600
+  iframe.height = 700
+  document.body.appendChild(iframe);
+
+  window.addEventListener('message', message => {
+    console.log('message from iframe Challenge', message.data)
+    fetch(`${vgsUrl}/threeds_authentications/${data.data.id}/challenges`, {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${readAccessToken()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "complete_indicator": "Y"
+      })
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('complete challenge', data)
+    })
+  });
+
+  // window.open(`${data.data.challenge.url}?creq=${data.data.challenge.params.creq}`, '_blank')
 }
 
 const threeDsAuth = () => {
@@ -69,7 +94,7 @@ const threeDsAuth = () => {
       "user_agent": window.navigator.userAgent,
     }
   }
-  fetch(`${vgsUrl}/3ds_authentications`, {
+  fetch(`${vgsUrl}/threeds_authentications`, {
     method: 'POST',
     headers: {
       "Authorization": `Bearer ${readAccessToken()}`,

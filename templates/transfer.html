@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Orchestration Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="flex flex-row items-center justify-center">
+    <h1 class="text-4xl font-bold">Universal Checkout: Default Flow</h1>
+    <a href="{{ url_for('saved_cards') }}">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-8 py-2 px-4 rounded text-sm">
+        Switch to Saved Crads flow
+      </button>
+    </a>
+  </div>
+  <h4><b>Access Token</b></h4>
+  <div id="token">{{access_token}}</div>
+  
+  <div class="container mx-auto flex flex-row">
+    <div id="vgs-checkout"></div>
+    
+  </div>
+  
+  <a href="" id="reload">Send one more time</a>
+  <!-- <script src="https://checkout.verygoodvault.com/v1/"></script> -->
+  <script src="https://js.verygoodvault.io/vgs-checkout/1.1.8-beta.7/checkout.umd.js"></script>
+
+  <script>
+    const order = {
+      "order": { 
+        "amount": 1000, 
+        "currency": "USD", 
+        "success_url": "https://dashboard.verygoodsecurity.com/success.html", 
+        "error_url": "https://dashboard.verygoodsecurity.com/error.html", 
+        "cancel_url": "https://dashboard.verygoodsecurity.com/cancel.html", 
+        "financial_instrument_types": ["card"]
+      },
+      "items": [{ "name": "VGS\" cookies", "price": 499, "quantity": 1 }]
+    }
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    
+    const request = new Request('https://multiplexing-demo.verygoodsecurity.io/orders', {
+      method: 'POST', 
+      headers: myHeaders,
+      body: JSON.stringify(order)
+    });
+
+    fetch(request)
+    .then(resp => resp.json())
+    .then((data) => {
+      console.log(data.data.id)
+      const checkout = new VGSCheckout.SavedCards({
+        vaultId: "{{customerVaultId}}",
+        environment: "sandbox",
+        accessToken: "{{access_token}}",
+        subAccount: "merchant-1",
+        cardsList: [
+          "FNx1Wj3UaWCVc7tNG5QywWYc",
+          "FNms8zPVUqWC3PQKzswXXLKH",
+          "FNkugYjq6u7BEQaDdZeHNdHP",
+        ],
+        transferConfiguration: {
+          orderId: data.data.id,
+          // reEnterCVV: true,
+        },
+      });
+      checkout.mount("#vgs-checkout", {
+        // labels: {
+        //   submit: {
+        //     ctaLabel: "Pay $1"
+        //   }
+        // },
+      });
+
+      checkout.on("SubmitSuccess", ({ data }) => { console.log('SubmitSuccess', data); });
+      checkout.on("SubmitFail", ({ data }) => { console.log('SubmitFail', data); });
+      checkout.on("TransferSuccess", ({ data }) => { console.log('TransferSuccess', data); });
+      checkout.on("TransferFail", ({ data }) => { console.log('TransferFail', data); });
+      // checkout.on('SubmitSuccess', (data) => {
+      //   console.log('Success', data)
+      //   document.getElementById('fin_id_input').value = data.data.data.id
+      // })
+
+      // checkout.on('SubmitFail', ({ data }) => {
+      //   checkout.update({
+      //     formStatus: "error"
+      //   });
+      //   document.getElementById('reload').style.display = "inline-block"
+      // })
+    })
+  </script>
+</body>
+</html>
