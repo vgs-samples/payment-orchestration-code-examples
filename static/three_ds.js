@@ -45,8 +45,11 @@ const tryDeviceFingerprint = (data) => {
   form.submit();
 
   return new Promise((resolve, reject) => {
-    const callback = (message) => {
+    let callback = {};
+    callback.value = (message) => {
       console.log("fingerprint message from iframe", message.data);
+      window.removeEventListener("message", callback.value);
+
       resolve(
         fetch(
           `${vgsUrl}/threeds_authentications/${data.data.id}/fingerprints`,
@@ -68,11 +71,7 @@ const tryDeviceFingerprint = (data) => {
           })
       );
     };
-
-    window.addEventListener("message", (message) => {
-      callback(message);
-      window.removeEventListener("message", callback);
-    });
+    window.addEventListener("message", callback.value);
   });
 };
 
