@@ -33,7 +33,6 @@ const tryDeviceFingerprint = (data) => {
   form.setAttribute("action", data.data.device_fingerprint.url);
   form.setAttribute("target", "fingerprint");
   form.setAttribute("method", "POST");
-
   for (const [key, value] of Object.entries(
     data.data.device_fingerprint.params
   )) {
@@ -43,7 +42,6 @@ const tryDeviceFingerprint = (data) => {
     form.appendChild(input);
   }
   document.body.appendChild(form);
-
   form.submit();
 
   return new Promise((resolve, reject) => {
@@ -66,6 +64,7 @@ const tryDeviceFingerprint = (data) => {
           .then((response) => response.json())
           .then((data) => {
             console.log("complete fingerprints", data);
+            return data;
           })
       );
     });
@@ -75,27 +74,46 @@ const tryDeviceFingerprint = (data) => {
 const tryChallengeFlow = (data) => {
   console.log("Challenge Flow ==>", data);
   var iframe = document.createElement("iframe");
-  iframe.src = `${data.data.challenge.url}?creq=${data.data.challenge.params.creq}`;
+  iframe.setAttribute("name", "challenge");
+  iframe.src = `${data.data.challenge.url}`;
   iframe.width = 600;
   iframe.height = 700;
   document.body.appendChild(iframe);
 
-  window.addEventListener("message", (message) => {
-    console.log("message from iframe Challenge", message.data);
-    fetch(`${vgsUrl}/threeds_authentications/${data.data.id}/challenges`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${readAccessToken()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        complete_indicator: "Y",
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("complete challenge", data);
-      });
+  const form = document.createElement("form");
+  form.setAttribute("action", data.data.challenge.url);
+  form.setAttribute("target", "challenge");
+  form.setAttribute("method", "POST");
+  for (const [key, value] of Object.entries(data.data.challenge.params)) {
+    const input = document.createElement("input");
+    input.setAttribute("name", key);
+    input.setAttribute("value", value);
+    form.appendChild(input);
+  }
+  document.body.appendChild(form);
+  form.submit();
+
+  return new Promise((resolve, reject) => {
+    window.addEventListener("message", (message) => {
+      console.log("message from iframe Challenge", message.data);
+      resolve(
+        fetch(`${vgsUrl}/threeds_authentications/${data.data.id}/challenges`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${readAccessToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            complete_indicator: "Y",
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("complete challenge", data);
+            return data;
+          })
+      );
+    });
   });
 
   // window.open(`${data.data.challenge.url}?creq=${data.data.challenge.params.creq}`, '_blank')
