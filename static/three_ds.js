@@ -98,8 +98,10 @@ const tryChallengeFlow = (data) => {
   form.submit();
 
   return new Promise((resolve, reject) => {
-    window.addEventListener("message", (message) => {
-      console.log("message from iframe Challenge", message.data);
+    let callback = {};
+    callback.value = (message) => {
+      console.log("challenge message from iframe", message.data);
+      window.removeEventListener("message", callback.value);
       resolve(
         fetch(`${vgsUrl}/threeds_authentications/${data.data.id}/challenges`, {
           method: "POST",
@@ -108,7 +110,7 @@ const tryChallengeFlow = (data) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            complete_indicator: "Y",
+            trans_status: "Y",
           }),
         })
           .then((response) => response.json())
@@ -117,7 +119,8 @@ const tryChallengeFlow = (data) => {
             return data;
           })
       );
-    });
+    };
+    window.addEventListener("message", callback.value);
   });
 
   // window.open(`${data.data.challenge.url}?creq=${data.data.challenge.params.creq}`, '_blank')
