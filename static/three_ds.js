@@ -1,7 +1,7 @@
 const amount = 1000;
 const currency = "USD";
 const vgsUrl =
-  "https://tntipgdjdyl-4880868f-d88b-4333-ab70-d9deecdbffc4.sandbox.verygoodproxy.com";
+  "https://tntmrn77zaf-4880868f-d88b-4333-ab70-d9deecdbffc4.sandbox.verygoodproxy.com";
 const readAccessToken = () => document.getElementById("token").textContent;
 
 const makeTransferWith3DS = (fId, threeDsData) => {
@@ -25,6 +25,33 @@ const makeTransferWith3DS = (fId, threeDsData) => {
 };
 
 const tryDeviceFingerprint = (data) => {
+  if (!data.data.device_fingerprint.wait_for_message) {
+    const wait = async () => {
+      // Polling for updates
+      while (true) {
+        const resp = await fetch(
+          `${vgsUrl}/threeds_authentications/${data.data.id}/fingerprints`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${readAccessToken()}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+          }
+        );
+        if (resp.status == 499) {
+          console.log("Still loading, try again");
+          continue;
+        }
+        const json = await resp.json();
+        console.log("Fingerprint resp", resp.status, json);
+        return json;
+      }
+    };
+    return wait();
+  }
+
   var iframe = document.createElement("iframe");
   iframe.setAttribute("name", "fingerprint");
   document.body.appendChild(iframe);
