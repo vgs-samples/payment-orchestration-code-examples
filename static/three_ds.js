@@ -25,33 +25,6 @@ const makeTransferWith3DS = (fId, threeDsData) => {
 };
 
 const tryDeviceFingerprint = (data) => {
-  if (!data.data.device_fingerprint.wait_for_message) {
-    const wait = async () => {
-      // Polling for updates
-      while (true) {
-        const resp = await fetch(
-          `${vgsUrl}/threeds_authentications/${data.data.id}/fingerprints`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${readAccessToken()}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({}),
-          }
-        );
-        if (resp.status == 499) {
-          console.log("Still loading, try again");
-          continue;
-        }
-        const json = await resp.json();
-        console.log("Fingerprint resp", resp.status, json);
-        return json;
-      }
-    };
-    return wait();
-  }
-
   var iframe = document.createElement("iframe");
   iframe.setAttribute("name", "fingerprint");
   document.body.appendChild(iframe);
@@ -70,6 +43,34 @@ const tryDeviceFingerprint = (data) => {
   }
   document.body.appendChild(form);
   form.submit();
+
+  if (!data.data.device_fingerprint.wait_for_message) {
+    const wait = async () => {
+      // Polling for updates
+      while (true) {
+        const resp = await fetch(
+          `${vgsUrl}/threeds_authentications/${data.data.id}/fingerprints`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${readAccessToken()}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+          }
+        );
+        // TODO: 504 shouldn't happen, we should modify the proxy upstream timeout to be more than 15 seconds
+        if (resp.status === 499 || resp.status === 504) {
+          console.log("Still loading fingerprint, try again");
+          continue;
+        }
+        const json = await resp.json();
+        console.log("Fingerprint resp", resp.status, json);
+        return json;
+      }
+    };
+    return wait();
+  }
 
   return new Promise((resolve, reject) => {
     let callback = {};
@@ -123,6 +124,34 @@ const tryChallengeFlow = (data) => {
   }
   document.body.appendChild(form);
   form.submit();
+
+  if (!data.data.device_fingerprint.wait_for_message) {
+    const wait = async () => {
+      // Polling for updates
+      while (true) {
+        const resp = await fetch(
+          `${vgsUrl}/threeds_authentications/${data.data.id}/challenges`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${readAccessToken()}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+          }
+        );
+        // TODO: 504 shouldn't happen, we should modify the proxy upstream timeout to be more than 15 seconds
+        if (resp.status === 499 || resp.status === 504) {
+          console.log("Still loading challenge, try again");
+          continue;
+        }
+        const json = await resp.json();
+        console.log("Challenge resp", resp.status, json);
+        return json;
+      }
+    };
+    return wait();
+  }
 
   return new Promise((resolve, reject) => {
     let callback = {};
