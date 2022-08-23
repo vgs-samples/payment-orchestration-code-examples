@@ -116,9 +116,34 @@
       // },
     });
     checkout.on('SubmitSuccess', (data) => {
+      checkout.update({
+        formStatus: "loading"
+      });
       console.log('Success', data)
       document.getElementById('fin_id_input').value = data.data.data.id
-      
+      threeDsAuth(data.data.data.id);
+      // const makeTransferWith3DS = () => {
+      //   return fetch(`${vgsUrl}/transfers`, {
+      //     method: "POST",
+      //     headers: {
+      //       Authorization: `Bearer ${document.getElementById("token").textContent}`,
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({
+      //       amount: 1000,
+      //       currency: "USD",
+      //       source: data.data.data.id,
+      //       // "three_ds_authentication": threeDsData.data.id
+      //     }),
+      //   })
+      //     .then((response) => response.json())
+      //     .then((data) => {
+      //       console.log(data);
+      //     });
+      // };
+      // makeTransferWith3DS()
+
+
       // fetch('/checkout', {
       //   method: 'POST',
       //   headers: {

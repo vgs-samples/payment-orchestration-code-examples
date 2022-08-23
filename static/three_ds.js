@@ -4,23 +4,31 @@ const vgsUrl =
   "https://tntipgdjdyl-4880868f-d88b-4333-ab70-d9deecdbffc4.sandbox.verygoodproxy.com";
 const readAccessToken = () => document.getElementById("token").textContent;
 
-const makeTransferWith3DS = (fId, threeDsData) => {
+const makeTransferWith3DS = (fId, threeDsData = false) => {
+  console.log('TRANSFER', fId, threeDsData )
+  let body = {
+    amount: amount,
+    currency: currency,
+    source: fId, 
+  }
+  if (threeDsData) {
+    body["three_ds_authentication"] = threeDsData.data.id
+  } 
+
   return fetch(`${vgsUrl}/transfers`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${readAccessToken()}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      amount: amount,
-      currency: currency,
-      source: fId,
-      // "three_ds_authentication": threeDsData.data.id
-    }),
+    body: JSON.stringify(body),
   })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+      checkout.update({
+        formStatus: "success"
+      });
     });
 };
 
@@ -122,12 +130,10 @@ const tryChallengeFlow = (data) => {
     };
     window.addEventListener("message", callback.value);
   });
-
-  // window.open(`${data.data.challenge.url}?creq=${data.data.challenge.params.creq}`, '_blank')
 };
 
-const threeDsAuth = () => {
-  const fId = document.getElementById("fin_id_input").value;
+const threeDsAuth = (fId) => {
+  // const fId = document.getElementById("fin_id_input").value;
 
   const data3ds = {
     card: fId,
@@ -164,9 +170,12 @@ const threeDsAuth = () => {
       if (data.data.state === "successful") {
         return makeTransferWith3DS(fId, data);
       }
+      if (data.data.error_code === "AuthenticationNotRequired") {
+        return makeTransferWith3DS(fId);
+      }
     })
     .then((data) => {
-      console.log("3ds_authentications ==>", data.data);
+      console.log("3ds_authentications 2 ==>", data.data);
       if (data.data.state === "device_fingerprint") {
         return tryDeviceFingerprint(data);
       }
@@ -176,10 +185,13 @@ const threeDsAuth = () => {
       if (data.data.state === "successful") {
         return makeTransferWith3DS(fId, data);
       }
+      if (data.data.error_code === "AuthenticationNotRequired") {
+        return makeTransferWith3DS(fId);
+      }
     });
 };
 
 document.getElementById("three_ds_btn").addEventListener("click", (e) => {
   e.preventDefault();
-  threeDsAuth();
+  // threeDsAuth();
 });
