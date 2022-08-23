@@ -125,7 +125,7 @@ const tryChallengeFlow = (data) => {
   document.body.appendChild(form);
   form.submit();
 
-  if (!data.data.device_fingerprint.wait_for_message) {
+  if (!data.data.challenge.wait_for_message) {
     const wait = async () => {
       // Polling for updates
       while (true) {
