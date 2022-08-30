@@ -199,10 +199,10 @@ const threeDsAuth = () => {
       timezone: new Date().getTimezoneOffset(),
       user_agent: window.navigator.userAgent,
     },
-    extra_config: {
+    extra_options: {
       merchantRiskIndicator: {
         shipIndicator: "05 ",
-        deliveryTimeFrame: "01 ",
+        deliveryTimeFrame: "01",
         reorderItemsInd: "02",
       },
     },
