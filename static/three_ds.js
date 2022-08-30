@@ -201,7 +201,7 @@ const threeDsAuth = () => {
     },
     extra_options: {
       merchantRiskIndicator: {
-        shipIndicator: "05 ",
+        shipIndicator: "05",
         deliveryTimeFrame: "01",
         reorderItemsInd: "02",
       },
