@@ -199,6 +199,13 @@ const threeDsAuth = () => {
       timezone: new Date().getTimezoneOffset(),
       user_agent: window.navigator.userAgent,
     },
+    extra_config: {
+      merchantRiskIndicator: {
+        shipIndicator: "05 ",
+        deliveryTimeFrame: "01 ",
+        reorderItemsInd: "02",
+      },
+    },
   };
   fetch(`${vgsUrl}/threeds_authentications`, {
     method: "POST",
