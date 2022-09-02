@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Orchestration Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="flex flex-row items-center justify-center">
+    <h1 class="text-4xl font-bold">Universal Checkout: 3DS Flow</h1>
+    <a href="{{ url_for('saved_cards') }}">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-8 py-2 px-4 rounded text-sm">
+        Switch to Saved Crads flow
+      </button>
+    </a>
+  </div>
+  <div id="token">{{access_token}}</div>
+  
+  <div class="container mx-auto flex flex-row">
+    <div class="basis-2/3"><div id="vgs-checkout"></div></div>
+    
+    <div class="basis-1/3 demo-data_wr">
+      <h2 class="text-xl font-bold">
+        <a
+          class="text-blue-600"
+          href="https://docs.3dsintegrator.com/docs/test-cards#3d-secure-10-test-cards" 
+          target="_blank"
+        >
+          PAAY.CO
+        </a> test cards</h2>
+      <div class="shadow-md rounded-md demo-data">
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Device fingerprint flow:&nbsp;</div>
+          <div class="basis-1/2 text-left">4005 5192 0000 0004 <button onclick="navigator.clipboard.writeText
+            ('4005519200000004')">Copy</button></div> <br>
+        </div>
+        
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Challenge flow:&nbsp;</div>
+          <div class="basis-1/2 text-left">6011 0009 9130 0009 <button onclick="navigator.clipboard.writeText
+            ('6011000991300009')">Copy</button></div> <br>
+        </div>
+      </div>
+      <br>
+      <h2 class="text-xl font-bold">
+        <a
+          class="text-blue-600"
+          href="https://docs.adyen.com/development-resources/testing/test-card-numbers" 
+          target="_blank"
+        >
+          Adyen
+        </a> test cards
+      </h2>
+      <div class="shadow-md rounded-md demo-data">
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Device fingerprint flow:&nbsp;</div>
+          <div class="basis-1/2 text-left">4917 6100 0000 0000 <button onclick="navigator.clipboard.writeText
+            ('4917610000000000')">Copy</button></div> <br>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Device fingerprint flow:&nbsp;</div>
+          <div class="basis-1/2 text-left">5201 2815 0512 9736 <button onclick="navigator.clipboard.writeText
+            ('5201281505129736')">Copy</button></div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Challenge flow:&nbsp;</div>
+          <div class="basis-1/2 text-left">4212 3456 7891 0006 <button onclick="navigator.clipboard.writeText
+            ('4212345678910006')">Copy</button></div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Success:&nbsp;</div>
+          <div class="basis-1/2 text-left">4199 3500 0000 0002 <button onclick="navigator.clipboard.writeText
+            ('4199350000000002')">Copy</button></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- <div class="basis-1/3 demo-data_wr">
+      <h2 class="text-xl font-bold">Demo credit card data</h2>
+      <div class="shadow-md rounded-md demo-data">
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Cardholder Name:&nbsp;</div>
+          <div class="basis-1/2 text-left">Thomas Anderson</div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Card number:&nbsp;</div>
+          <div class="basis-1/2 text-left">4111 1111 1111 1111</div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">Expiration Date:&nbsp;</div>
+          <div class="basis-1/2 text-left">12/23</div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">CVC:&nbsp;</div>
+          <div class="basis-1/2 text-left">123</div>
+        </div>
+        <hr>
+        <br>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">PAAY 3DS device fingerprint:&nbsp;</div>
+          <div class="basis-1/2 text-left">4005 5192 0000 0004 <button onclick="navigator.clipboard.writeText
+            ('4005519200000004')">Copy</button></div> <br>
+        </div>
+        
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">PAAY 3DS device challenge:&nbsp;</div>
+          <div class="basis-1/2 text-left">6011 0009 9130 0009 <button onclick="navigator.clipboard.writeText
+            ('6011000991300009')">Copy</button></div> <br>
+        </div>
+        <br>
+        <hr>
+        <br>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">3DS device fingerprint:&nbsp;</div>
+          <div class="basis-1/2 text-left">4917 6100 0000 0000 <button onclick="navigator.clipboard.writeText
+            ('4917610000000000')">Copy</button></div> <br>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">3DS device fingerprint:&nbsp;</div>
+          <div class="basis-1/2 text-left">5201 2815 0512 9736 <button onclick="navigator.clipboard.writeText
+            ('5201281505129736')">Copy</button></div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">3DS Challenge:&nbsp;</div>
+          <div class="basis-1/2 text-left">4212 3456 7891 0006 <button onclick="navigator.clipboard.writeText
+            ('4212345678910006')">Copy</button></div>
+        </div>
+        <div class="flex flex-row">
+          <div class="basis-1/2 text-right opacity-50">3DS Success:&nbsp;</div>
+          <div class="basis-1/2 text-left">4199 3500 0000 0002 <button onclick="navigator.clipboard.writeText
+            ('4199350000000002')">Copy</button></div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+  
+  <a href="" id="reload">Send one more time</a>
+  <script src="https://checkout.verygoodvault.com/v1/"></script>
+  <script src="/static/three_ds.js"></script>
+
+  <script>
+    const checkout = new VGSCheckout.Checkout({
+      vaultId: "{{customerVaultId}}",
+      environment: "sandbox",
+      accessToken: "{{access_token}}",
+      billingAddress: false,
+      billingAddressConfiguration: {
+        validCountries: ["US"],
+        country: {
+          visible: false
+        },
+        address1: {
+          visible: false
+        },
+        address2: {
+          visible: false
+        },
+        city: {
+          visible: false
+        }
+      },
+    });
+
+    checkout.mount("#vgs-checkout", {
+      labels: {
+        submit: {
+          ctaLabel: "Pay $1"
+        }
+      },
+    });
+    checkout.on('SubmitSuccess', async (data) => {
+      checkout.update({
+        formStatus: "loading"
+      });
+      const threeDsResult = await three(data.data.data.id)
+      if (threeDsResult.state === "successful") {
+        checkout.update({
+          formStatus: "success"
+        });
+        document.getElementById('reload').style.display = "inline-block"
+      }
+       
+      
+    })
+
+    checkout.on('SubmitFail', ({ data }) => {
+      checkout.update({
+        formStatus: "error"
+      });
+      document.getElementById('reload').style.display = "inline-block"
+    })
+  </script>
+</body>
+</html>
