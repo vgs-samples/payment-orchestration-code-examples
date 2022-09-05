@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Orchestration Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-900">
+    <div class="container flex flex-wrap justify-between items-center mx-auto">
+      <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+        <ul class="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <li>
+            <a href="{{ url_for( 'index' ) }}" 
+              class="block pr-4 pl-4 text-gray-700 rounded  p-0 {{ 'text-blue-700' if active_page == 'index' else '' }}">
+                Create finantial instruments
+            </a>
+          </li>
+          <li>
+            <a href="{{ url_for( 'saved_cards' ) }}" 
+              class="block pr-4 pl-4 text-gray-700 rounded  p-0 {{ 'text-blue-700' if active_page == 'saved_cards' else '' }}">
+                Saved cards
+            </a>
+          </li>
+          <li>
+            <a href="{{ url_for( 'transfer' ) }}" 
+              class="block pr-4 pl-4 text-gray-700 rounded  p-0 {{ 'text-blue-700' if active_page == 'transfer' else '' }}">
+                Transfer
+            </a>
+          </li>
+          <li>
+            <a href="{{ url_for( 'three_ds' ) }}" 
+              class="block pr-4 pl-4 text-gray-700 rounded  p-0 {{ 'text-blue-700' if active_page == 'three_ds' else '' }}">
+                3DS
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% block content %}
+  {% endblock %}
+</body>
+</html>

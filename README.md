@@ -2,9 +2,11 @@
 
 Before running the application, make sure, that you have access to your [Payment Orchestration Instance & API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/quickstart) and all prerequisites are met, gateways and rules are set and you have access credentials to authenticate.
 
-This demo contains two flows: 
+This demo contains 4 flows: 
 - Default flow: Checkout create `financial_instruments` in Payment Orchestration application
 - Saved Cards flow: Allow usage of pre-saved `financial_instruments`
+- Transfer flow: Checkout complete payment flow, create `financial_instruments` and make a `transfer`
+- 3DS flow: example how client application can works with VGS 3DS API 
 
 This demo is built with:
 - [VGS Payment Orchestration API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration)
@@ -36,15 +38,12 @@ PAYMENT_ORCH_CLIENT_SECRET=
 3. `export FLASK_APP=app`
 4. `pip install -r ./requirements.txt`
 5. `flask run`
-6. `ngrok http 5000` for sharing your localhost worldwide
-7. Setup [ngrok](https://ngrok.com/) link as upstream for Inbound route on the Dashboard
-8. Open `http://localhost:5000` in browser
+6. Open `http://localhost:5000` in browser
 
 ### How to run with Docker
 1. `docker-compose up --build`
 2. `ngrok http 5000` for sharing your localhost worldwide
-3. Setup [ngrok](https://ngrok.com/) link as upstream for Inbound route on the Dashboard
-5. Open `http://localhost:5000` in browser
+3. Open `http://localhost:5000` in browser
 
 ### How to use
 Fill and submit the Universal Checkout form with a test payment card. Please note that a test payment card depends on the gateway you use and can be different if you want to try a successful transaction flow.
