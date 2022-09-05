@@ -46,6 +46,7 @@ PAYMENT_ORCH_CLIENT_SECRET=
 3. Open `http://localhost:5000` in browser
 
 ### How to use
+#### Create financial instruments
 Fill and submit the Universal Checkout form with a test payment card. Please note that a test payment card depends on the gateway you use and can be different if you want to try a successful transaction flow.
 ```
 cardholder: Any Name
@@ -53,5 +54,10 @@ cc: 4111 1111 1111 1111
 exp.date: 02/23
 cvc: 123
 ```
+
+#### 3DS flow
+Example show how to works with [VGS 3DS API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/)
+Before start, make shure, that you create one of the possible 3DS Provider: Adyen, PAAY.co, 3dsecure.io
+
 
 For more details on how to build your payments flow, check [this guide](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/payment-flow) out.
