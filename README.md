@@ -42,8 +42,7 @@ PAYMENT_ORCH_CLIENT_SECRET=
 
 ### How to run with Docker
 1. `docker-compose up --build`
-2. `ngrok http 5000` for sharing your localhost worldwide
-3. Open `http://localhost:5000` in browser
+2. Open `http://localhost:5000` in browser
 
 ### How to use
 #### Create financial instruments
@@ -56,8 +55,11 @@ cvc: 123
 ```
 
 #### 3DS flow
-Example show how to works with [VGS 3DS API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/)
+Example shows how to work with [VGS 3DS API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/)
 Before start, make shure, that you create one of the possible 3DS Provider: Adyen, PAAY.co, 3dsecure.io
 
 
 For more details on how to build your payments flow, check [this guide](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/payment-flow) out.
+
+##### How 3DS works
+ ![3DS flow diagram](/static/image.png)
