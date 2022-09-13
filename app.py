@@ -6,6 +6,7 @@ from flask import render_template, request
 from flask import request
 from flask_cors import CORS
 from pathlib import Path
+import json
 
 app = Flask(__name__)
 
@@ -33,11 +34,20 @@ def index():
     access_token = get_access_token()
     return render_template('./index.html', access_token = access_token['access_token'], customerVaultId = CUSTOMER_VAULT_ID)
 
+@app.route("/transfer")
+def transfer():
+    access_token = get_access_token()
+    return render_template('./transfer.html', access_token = access_token['access_token'], customerVaultId = CUSTOMER_VAULT_ID)
+
+@app.route("/three-ds")
+def three_ds():
+    access_token = get_access_token()
+    return render_template('./three-ds.html', access_token = access_token['access_token'], customerVaultId = CUSTOMER_VAULT_ID)
+
 @app.route("/saved-cards")
 def saved_cards():
     access_token = get_access_token()
     return render_template('./saved-cards.html', access_token = access_token['access_token'], customerVaultId = CUSTOMER_VAULT_ID)
-
 
 @app.route("/checkout", methods=['POST'])
 def checkout():
@@ -52,6 +62,7 @@ def checkout():
         "currency": "USD",
         "source": fin_instrument.get('id'),
     }
+
     transfer = requests.post(
         'https://' + 'payments.sandbox.verygoodsecurity.app' + '/transfers',
         headers = headers,

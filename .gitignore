@@ -3,4 +3,5 @@ venv
 ngrok
 .python-version
 .env
+.env copy
 .DS_Store

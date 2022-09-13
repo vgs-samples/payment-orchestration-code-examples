@@ -2,9 +2,11 @@
 
 Before running the application, make sure, that you have access to your [Payment Orchestration Instance & API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/quickstart) and all prerequisites are met, gateways and rules are set and you have access credentials to authenticate.
 
-This demo contains two flows: 
+This demo contains 4 flows: 
 - Default flow: Checkout create `financial_instruments` in Payment Orchestration application
 - Saved Cards flow: Allow usage of pre-saved `financial_instruments`
+- Transfer flow: Checkout complete payment flow, create `financial_instruments` and make a `transfer`
+- 3DS flow: example how client application can works with VGS 3DS API 
 
 This demo is built with:
 - [VGS Payment Orchestration API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration)
@@ -43,6 +45,7 @@ PAYMENT_ORCH_CLIENT_SECRET=
 2. Open `http://localhost:5000` in browser
 
 ### How to use
+#### Create financial instruments
 Fill and submit the Universal Checkout form with a test payment card. Please note that a test payment card depends on the gateway you use and can be different if you want to try a successful transaction flow.
 ```
 cardholder: Any Name
@@ -51,4 +54,12 @@ exp.date: 02/23
 cvc: 123
 ```
 
+#### 3DS flow
+Example shows how to work with [VGS 3DS API](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/api/)
+Before start, make shure, that you create one of the possible 3DS Provider: Adyen, PAAY.co, 3dsecure.io
+
+
 For more details on how to build your payments flow, check [this guide](https://www.verygoodsecurity.com/docs/payment-optimization/orchestration/payment-flow) out.
+
+##### How 3DS works
+ ![3DS flow diagram](/static/image.png)
